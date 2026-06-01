@@ -1,0 +1,56 @@
+---
+// ============================================================
+//  ENRIQUE OLVERA — About
+//  Static page. Ported from proposal 3 (NICO'S PROPOSSAL - 3) — the layout the
+//  client chose: bio text on the left, a portrait filling the right column.
+//  The portrait column is a single FIXED photo (no slideshow) — the first image
+//  of the original set, olvera-about-04.webp. Shares the masthead via <Masthead/>.
+// ============================================================
+import Masthead from '../components/Masthead.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enrique Olvera — About</title>
+  <meta name="description" content="Enrique Olvera (b. 1976, Mexico City) — Mexican restaurateur and chef, CEO and creative director of the Casamata group." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <Masthead />
+
+  <main id="top">
+    <section class="view-about" aria-label="About Enrique Olvera">
+      <div class="about">
+
+        <div class="about__text">
+          <h1 class="about__title">About</h1>
+          <div class="about__body">
+            <p>Enrique Olvera (b. 1976, Mexico&nbsp;City) is a Mexican restaurateur and chef.</p>
+            <p>Olvera studied and graduated from the Culinary Institute of America in Hyde&nbsp;Park, New&nbsp;York in 1999. Upon his return to Mexico in the year of 2000, he opened up his first restaurant, Pujol. The restaurant was rewarded two Michelin&nbsp;stars in 2024 and has been reoccurring on various lists of recognition for the past two decades. In 2014 Olvera opened Cosme in New&nbsp;York, his first restaurant outside of Mexico. Cosme is now a celebrated Manhattan institution after more than a decade on the scene. In 2017 Pujol moved from its original site on Petrarca in Polanco, to its current location on Tennyson, in the same neighborhood. Between 2018 and 2019 he transformed the original Pujol site into a mezcal bar called Ticuchi and two individual residences above called Casa&nbsp;Teo.</p>
+            <p>Ever since the opening of Pujol, the hospitality group, now named Casamata, has grown into over 10 operating hospitality concepts in cities like Mexico&nbsp;City, New&nbsp;York and Los&nbsp;Angeles. Olvera is also involved in the Criollo group with restaurants and hotels in both Oaxaca and San&nbsp;José del&nbsp;Cabo. Olvera also operates and consults other hospitality projects inside and outside of Mexico under his consulting company called Taller Enrique&nbsp;Olvera (TEO).</p>
+            <p>Throughout his career, Olvera has been building a formative role in the contemporary Mexican hospitality industry. He has been involved in various projects around food, design and architecture. Between 2012 and 2014 he organized four editions of Mesamérica, a gastronomic event around food in Mexico. He is also the author of numerous books and publications including Uno (2010), En la milpa (2013), Boomerang (2015), Mexico from the Inside Out (2015), Tu Casa Mi Casa (2019) and Sunny Days, Taco Nights (2025).</p>
+            <p>Today Olvera works as CEO and creative director of the group and oversees new openings, the development of new concepts and existing operations.</p>
+          </div>
+        </div>
+
+        <div class="about__portrait">
+          <img class="about__photo" src="/img/olvera-about-04.webp" alt="Portrait of Enrique Olvera" decoding="async" />
+          <div class="about__credit">Photograph &mdash; Andrea Tejeda&nbsp;K.</div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="/script.js" is:inline></script>
+</body>
+</html>

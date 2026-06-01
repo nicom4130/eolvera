@@ -5,21 +5,19 @@ import { createElement } from 'react';
 //  KEYSTATIC CONFIG — Enrique Olvera · News admin
 // ============================================================
 //
-//  Local mode: content lives in this repo (src/content/news/*) and images in
-//  public/images/news. Works with NO accounts — open /keystatic to edit.
-//
-//  >>> SWITCH TO GITHUB MODE LATER (after the GitHub App / OAuth is set up): <<<
-//      storage: {
-//        kind: 'github',
-//        repo: 'newseolvera/enriqueolvera-site',
-//      },
-//  Then create a GitHub App for OAuth (Keystatic docs -> "GitHub mode") and add
-//  the App's KEYSTATIC_GITHUB_CLIENT_ID / KEYSTATIC_GITHUB_CLIENT_SECRET /
-//  KEYSTATIC_SECRET env vars in Vercel. Nothing else in this file changes.
+//  GitHub mode: the admin commits content straight to this repo via a GitHub
+//  App, so editors work on the LIVE site (newseolvera signs in with GitHub).
+//  Needs 3 env vars (set in Vercel, and in .env.local for local dev):
+//    KEYSTATIC_GITHUB_CLIENT_ID / KEYSTATIC_GITHUB_CLIENT_SECRET / KEYSTATIC_SECRET
+//  Create them once via the setup wizard at <site>/keystatic (it pre-fills the
+//  GitHub App: contents read/write + pull-requests, callback on this domain).
+//  The build-time reader still reads the committed files from disk, so the
+//  static site renders even before the wizard is done.
 //
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'github',
+    repo: 'newseolvera/enriqueolvera-site',
   },
 
   ui: {
@@ -78,11 +76,10 @@ export default config({
         }),
         size: fields.select({
           label: 'Tamaño en el mosaico',
-          description: 'Cuánto ancho ocupa la nota en la grilla de News (no aplica si es la nota principal).',
+          description: 'Normal entra en la grilla de columnas; Ancho completo ocupa una fila entera para sí sola. (No aplica si es la nota principal.)',
           options: [
-            { label: 'Normal — 1 columna', value: 'normal' },
-            { label: 'Destacada — 2 columnas', value: 'featured' },
-            { label: 'Full — ancho completo', value: 'full' },
+            { label: 'Normal — en la grilla', value: 'normal' },
+            { label: 'Ancho completo — fila propia', value: 'full' },
           ],
           defaultValue: 'normal',
         }),

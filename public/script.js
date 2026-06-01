@@ -195,50 +195,6 @@
   });
 
   /* ---------------------------------------------------------
-     Masonry — CSS Grid + JS row spans. The grid gives each card a
-     column span (the CMS `size`); this measures the card's real
-     content height and sets grid-row span so cards pack like masonry
-     while keeping every image's native aspect ratio.
-     --------------------------------------------------------- */
-  var mosaic = doc.getElementById("mosaic");
-
-  function layoutMasonry() {
-    if (!mosaic) return;
-    var cs = window.getComputedStyle(mosaic);
-    var rowH = parseFloat(cs.gridAutoRows) || 1;
-    var rowGap = parseFloat(cs.rowGap) || 0;
-    var stories = mosaic.querySelectorAll(".story");
-    for (var i = 0; i < stories.length; i++) {
-      var inner = stories[i].querySelector(".story__inner") || stories[i];
-      var h = inner.getBoundingClientRect().height;
-      var span = Math.ceil((h + rowGap) / (rowH + rowGap));
-      stories[i].style.gridRowEnd = "span " + span;
-    }
-  }
-
-  if (mosaic) {
-    // first pass now (DOM is ready — script runs at end of body)
-    layoutMasonry();
-
-    // re-measure as each image finishes loading (heights change)
-    var imgs = mosaic.querySelectorAll("img");
-    for (var k = 0; k < imgs.length; k++) {
-      if (!imgs[k].complete) imgs[k].addEventListener("load", layoutMasonry);
-    }
-
-    // web fonts can change title heights once swapped in
-    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(layoutMasonry);
-
-    // and on load + resize (rAF-throttled)
-    window.addEventListener("load", layoutMasonry);
-    var raf;
-    window.addEventListener("resize", function () {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(layoutMasonry);
-    });
-  }
-
-  /* ---------------------------------------------------------
      Boot
      --------------------------------------------------------- */
   applyLang("en");

@@ -213,25 +213,25 @@ body::after {
 
 .front__split { margin: clamp(1.8rem, 3.5vw, 3rem) 0; }
 
-/* mosaic — CSS Grid + JS masonry (script.js measures each card and sets its
-   grid-row span). Grid lets a card span columns (the CMS `size` field) while
-   masonry keeps every image at its native aspect ratio. grid-auto-rows is a
-   fine unit the JS divides into; row-gap is the vertical rhythm between cards. */
-.mosaic {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: 8px;
-  column-gap: var(--col-gap);
-  row-gap: var(--row-gap);
-}
+/* mosaic — newspaper masonry via CSS multi-column. The browser balances the
+   columns natively, so there are NO vertical gaps between cards, and every
+   image keeps its native AR. Each story is EITHER in the 3-up grid (`normal`)
+   OR breaks out to its own full-width row (`full`, via `column-span: all`).
+   No in-between size on purpose — a 2-col span can't pack without ragged gaps. */
+.mosaic { columns: 3; column-gap: var(--col-gap); }
 .story {
-  grid-row-end: span 1;   /* overwritten inline by script.js once measured */
-  align-self: start;      /* content sits at the top of its (taller) grid cell */
-  cursor: pointer;        /* whole story reads as a link */
+  break-inside: avoid; -webkit-column-break-inside: avoid;
+  display: inline-block; width: 100%;
+  margin: 0 0 var(--row-gap);
+  cursor: pointer;   /* whole story reads as a link */
 }
-.story[data-size="featured"] { grid-column: span 2; }
-.story[data-size="full"]     { grid-column: 1 / -1; }
-.story__inner { display: block; }   /* measured by the masonry JS */
+.story[data-size="full"] {
+  display: block;
+  column-span: all; -webkit-column-span: all;
+  margin-top: .4rem;
+}
+.story[data-size="full"] .story__media img { max-height: 68vh; object-fit: cover; }
+.story__inner { display: block; }
 .story__media { display: block; overflow: hidden; margin-bottom: .8rem; }
 .story__media img { width: 100%; height: auto; transition: opacity .4s, transform .7s var(--ease); }
 .story:hover .story__media img { transform: scale(1.02); opacity: .94; }
@@ -251,11 +251,44 @@ body::after {
 }
 
 /* ===========================================================
+   ABOUT (page) — ported from proposal 3. Text column on the left,
+   single FIXED portrait filling the right column (sticky, so it
+   stays in view while the bio scrolls past). No slideshow.
+   =========================================================== */
+.about {
+  display: grid;
+  grid-template-columns: 1fr 1.22fr;   /* text · photo (photo a touch wider) */
+  align-items: start;
+  gap: 0;
+}
+.about__text { padding: clamp(2rem, 7vh, 5.5rem) var(--pad) clamp(2.5rem, 6vw, 5rem); }
+.about__text > * { max-width: 38rem; }
+.about__title { font-family: var(--display); font-weight: 400; font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: .95; margin: 0 0 1.6rem; }
+.about__body p { font-size: clamp(1rem, 1.3vw, 1.12rem); color: var(--ink-2); line-height: 1.78; }
+.about__body p + p { margin-top: 1.3rem; }
+.about__body p:first-child { font-family: var(--display); font-size: clamp(1.35rem, 2.4vw, 1.9rem); font-style: italic; color: var(--ink); line-height: 1.4; }
+.about__portrait {
+  position: sticky; top: 0;
+  height: 100svh; overflow: hidden; background: #ececec;
+}
+.about__photo { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.about__credit {
+  position: absolute; left: 1rem; bottom: 1rem;
+  font-family: var(--sans); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+  color: #fff; mix-blend-mode: difference;
+}
+@media (max-width: 880px) {
+  .about { grid-template-columns: 1fr; }
+  .about__portrait { position: static; height: clamp(360px, 58vh, 600px); order: -1; }
+  .about__text { padding: clamp(1.6rem, 5vw, 2.6rem) var(--pad) clamp(2rem, 6vw, 3.5rem); }
+  .about__text > * { max-width: none; }
+}
+
+/* ===========================================================
    RESPONSIVE
    =========================================================== */
 @media (max-width: 980px) {
-  .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .story[data-size="featured"] { grid-column: span 2; }   /* = full width at 2 cols */
+  .mosaic { columns: 2; }
 }
 @media (max-width: 760px) {
   .lead { grid-template-columns: 1fr; gap: 1.1rem; }
@@ -268,8 +301,7 @@ body::after {
   .ribbon { gap: .9rem 1.1rem; }
 }
 @media (max-width: 560px) {
-  .mosaic { grid-template-columns: 1fr; }
-  .story[data-size="featured"], .story[data-size="full"] { grid-column: 1 / -1; }
+  .mosaic { columns: 1; }
   .ribbon__sep { display: none; }
   .masthead__top { display: flex; flex-direction: column-reverse; align-items: center; gap: .5rem; }
   .lang { position: static; transform: none; }
