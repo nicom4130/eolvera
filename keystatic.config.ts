@@ -71,14 +71,14 @@ export default config({
         pinned: fields.checkbox({
           label: 'Fijar como nota principal',
           description:
-            'La pone arriba, grande, como portada (reemplaza a la más reciente). Si marcás varias, gana la más reciente.',
+            'La coloca arriba, en grande, como portada (reemplaza a la más reciente). Si seleccionas varias, se usa la más reciente.',
           defaultValue: false,
         }),
         size: fields.select({
           label: 'Tamaño en el mosaico',
-          description: 'Normal entra en la grilla de columnas; Ancho completo ocupa una fila entera para sí sola. (No aplica si es la nota principal.)',
+          description: 'Normal entra en la cuadrícula de columnas; Ancho completo ocupa una fila entera para ella sola. (No aplica si es la nota principal.)',
           options: [
-            { label: 'Normal — en la grilla', value: 'normal' },
+            { label: 'Normal — en la cuadrícula', value: 'normal' },
             { label: 'Ancho completo — fila propia', value: 'full' },
           ],
           defaultValue: 'normal',
@@ -90,7 +90,7 @@ export default config({
           validation: { length: { max: 1200 } },
         }),
         link: fields.url({
-          label: 'Link externo',
+          label: 'Enlace externo',
           description: 'El botón "View +" abre este enlace en otra pestaña.',
           validation: { isRequired: true },
         }),
