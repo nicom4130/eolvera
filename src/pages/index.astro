@@ -1,0 +1,221 @@
+---
+// ============================================================
+//  ENRIQUE OLVERA — home (front-page news)
+//  Static page. Masthead + mega-menu + footer are hardcoded (NOT in the CMS).
+//  Only the NEWS section is dynamic: cards come from the Keystatic `news`
+//  collection, read at build time. Ordered by date desc; most recent = lead.
+// ============================================================
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+
+const entries = await reader.collections.news.all();
+
+// newest first; the most recent is the lead, the rest fill the mosaic
+const news = entries
+  .map((e) => e.entry)
+  .sort((a, b) => ((a.date ?? '') < (b.date ?? '') ? 1 : -1));
+
+// The Keystatic image field stores only the filename; resolve it against the
+// field's publicPath so the <img src> points at the real file under /public.
+const IMG_BASE = '/images/news/';
+const imgSrc = (file?: string | null) =>
+  !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
+
+// The editor can pin any story as the front-page lead; the most recent pinned
+// one wins. With nothing pinned we fall back to the newest story (old behavior).
+const lead = news.find((n) => n.pinned) ?? news[0];
+const rest = news.filter((n) => n !== lead);
+
+// "April 2026" style label from an ISO date string
+function monthYear(iso?: string | null) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enrique Olvera</title>
+  <meta name="description" content="The gastronomic universe of Enrique Olvera — news, restaurants and projects." />
+
+  <!-- Type system: Bodoni Moda (display Didone) + locally-bundled Sofia Pro
+       (the only sans — used for body and all labels). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <!-- ░░ MASTHEAD — newspaper front page (NYT-style), name set in place of a logo ░░ -->
+  <header class="masthead" id="masthead">
+
+    <!-- the name replaces the logotype; language sits on the same row -->
+    <div class="masthead__top">
+      <a class="masthead__title" href="#top" aria-label="Enrique Olvera — home">Enrique Olvera</a>
+      <div class="lang" data-lang>
+        <button class="lang__opt is-active" data-lang-set="en" type="button" aria-pressed="true">EN</button>
+        <span class="lang__sep" aria-hidden="true">/</span>
+        <button class="lang__opt" data-lang-set="es" type="button" aria-pressed="false">ES</button>
+      </div>
+    </div>
+
+    <!-- section ribbon — NYT horizontal nav. Hovering a group drops a
+         full-width mega menu (#mega) with that group's full directory. -->
+    <nav class="ribbon" aria-label="Sections">
+      <a class="ribbon__link" href="#" data-mega="Casamata">Casamata</a>
+      <a class="ribbon__link" href="#" data-mega="Casa Teo">Casa&nbsp;Teo</a>
+      <a class="ribbon__link" href="#" data-mega="Criollo">Criollo</a>
+      <a class="ribbon__link" href="#" data-mega="Teo">Teo</a>
+      <a class="ribbon__link" href="#" data-mega="Projects">Projects</a>
+      <span class="ribbon__sep" aria-hidden="true"></span>
+      <a class="ribbon__link" href="#news" data-i18n="news">News</a>
+      <a class="ribbon__link" href="#" data-i18n="about">About</a>
+      <a class="ribbon__link" href="#" data-i18n="consulting">Consulting</a>
+    </nav>
+
+    <!-- ░░ MEGA MENU — NYT-style full-width dropdown. Each group is laid out as
+         two columns of directory links + a preview image that swaps on hover.
+         Items with a photo carry data-img; the rest show a neutral placeholder. ░░ -->
+    <div class="mega" id="mega" aria-hidden="true">
+      <div class="mega__inner">
+
+        <section class="mega__panel" data-panel="Casamata">
+          <div class="mega__col mega__col--left">
+            <a class="mega__item" href="https://www.pujol.com.mx" target="_blank" rel="noopener noreferrer" data-img="/img/menu/pujol.webp"><span class="mega__name">Pujol</span><span class="mega__meta">Mexico City</span></a>
+            <a class="mega__item" href="https://www.pujol.com.mx/en/molino-el-pujol" target="_blank" rel="noopener noreferrer"><span class="mega__name">Molino &ldquo;El Pujol&rdquo;</span><span class="mega__meta">Mexico City</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">Pujol Central</span><span class="mega__meta" data-i18n="autumn26">Opening Autumn 2026</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">pujol.itto</span><span class="mega__meta" data-i18n="spring26">Opening Spring 2026</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">Hoster&iacute;a Pujol</span><span class="mega__meta" data-i18n="open28">Opening 2028</span></a>
+            <a class="mega__item" href="https://www.ticuchi.mx/" target="_blank" rel="noopener noreferrer" data-img="/img/news/ticuchi.webp"><span class="mega__name">Ticuchi</span><span class="mega__meta">Mexico City</span></a>
+          </div>
+          <figure class="mega__preview" aria-hidden="true">
+            <img class="mega__preview-img" alt="" decoding="async" />
+            <img class="mega__preview-img" alt="" decoding="async" />
+          </figure>
+          <div class="mega__col mega__col--right">
+            <a class="mega__item" href="https://cosmenyc.com" target="_blank" rel="noopener noreferrer" data-img="/img/news/cosme.webp"><span class="mega__name">Cosme</span><span class="mega__meta">New York</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">Cosme Bar</span><span class="mega__meta" data-i18n="autumn26">Opening Autumn 2026</span></a>
+            <a class="mega__item" href="https://www.essetaco.com" target="_blank" rel="noopener noreferrer"><span class="mega__name">Esse Taco</span><span class="mega__meta">&mdash;</span></a>
+            <a class="mega__item" href="https://damiandtla.com" target="_blank" rel="noopener noreferrer" data-img="/img/news/damian.webp"><span class="mega__name">Damian</span><span class="mega__meta">Los Angeles</span></a>
+            <a class="mega__item" href="https://www.instagram.com/ditroitdtla" target="_blank" rel="noopener noreferrer" data-img="/img/news/detroit.webp"><span class="mega__name">Ditroit</span><span class="mega__meta">Los Angeles</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">San Damian</span><span class="mega__meta" data-i18n="summer26">Opening Summer 2026</span></a>
+          </div>
+        </section>
+
+        <section class="mega__panel" data-panel="Casa Teo">
+          <div class="mega__col mega__col--left">
+            <a class="mega__item" href="#"><span class="mega__name">Casa Teo 1</span><span class="mega__meta">Mexico City</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">Casa Teo 2</span><span class="mega__meta">Mexico City</span></a>
+          </div>
+          <figure class="mega__preview" aria-hidden="true">
+            <img class="mega__preview-img" alt="" decoding="async" />
+            <img class="mega__preview-img" alt="" decoding="async" />
+          </figure>
+          <div class="mega__col mega__col--right">
+            <a class="mega__item" href="#"><span class="mega__name">Takonoma</span><span class="mega__meta" data-i18n="shop">Shop</span></a>
+          </div>
+        </section>
+
+        <section class="mega__panel" data-panel="Criollo">
+          <div class="mega__col mega__col--left">
+            <a class="mega__item" href="https://www.instagram.com/criollo_oax" target="_blank" rel="noopener noreferrer"><span class="mega__name">Criollo Oaxaca</span><span class="mega__meta">Oaxaca</span></a>
+            <a class="mega__item" href="https://www.airbnb.com/rooms/37160054" target="_blank" rel="noopener noreferrer"><span class="mega__name">Casa Criollo</span><span class="mega__meta">Oaxaca</span></a>
+          </div>
+          <figure class="mega__preview" aria-hidden="true">
+            <img class="mega__preview-img" alt="" decoding="async" />
+            <img class="mega__preview-img" alt="" decoding="async" />
+          </figure>
+          <div class="mega__col mega__col--right">
+            <a class="mega__item" href="#"><span class="mega__name">Refugio</span><span class="mega__meta" data-i18n="open27">Opening 2027</span></a>
+            <a class="mega__item" href="#"><span class="mega__name">San Jos&eacute; del Criollo</span><span class="mega__meta" data-i18n="summer26">Opening Summer 2026</span></a>
+          </div>
+        </section>
+
+        <section class="mega__panel" data-panel="Teo">
+          <div class="mega__col mega__col--left">
+            <a class="mega__item" href="#"><span class="mega__name">Consulting</span><span class="mega__meta">Worldwide</span></a>
+            <a class="mega__item" href="https://www.mantarestaurant.com" target="_blank" rel="noopener noreferrer" data-img="/img/news/manta.webp"><span class="mega__name">Manta</span><span class="mega__meta">Los Cabos</span></a>
+          </div>
+          <figure class="mega__preview" aria-hidden="true">
+            <img class="mega__preview-img" alt="" decoding="async" />
+            <img class="mega__preview-img" alt="" decoding="async" />
+          </figure>
+          <div class="mega__col mega__col--right">
+            <a class="mega__item" href="https://www.oneandonlyresorts.com/mandarina/dining/carao" target="_blank" rel="noopener noreferrer"><span class="mega__name">Carao</span><span class="mega__meta">Mandarina</span></a>
+          </div>
+        </section>
+
+        <section class="mega__panel" data-panel="Projects">
+          <div class="mega__col mega__col--left">
+            <a class="mega__item" href="https://roselosangeles.com" target="_blank" rel="noopener noreferrer"><span class="mega__name">Rose Los Angeles</span><span class="mega__meta">Los Angeles</span></a>
+            <a class="mega__item" href="https://www.elpoaig.com/en" target="_blank" rel="noopener noreferrer"><span class="mega__name">La Poaig</span><span class="mega__meta">&mdash;</span></a>
+          </div>
+          <figure class="mega__preview" aria-hidden="true">
+            <img class="mega__preview-img" alt="" decoding="async" />
+            <img class="mega__preview-img" alt="" decoding="async" />
+          </figure>
+          <div class="mega__col mega__col--right">
+            <a class="mega__item" href="https://manojomezcal.com" target="_blank" rel="noopener noreferrer"><span class="mega__name">Manojo Mezcal</span><span class="mega__meta">&mdash;</span></a>
+            <a class="mega__item" href="https://www.instagram.com/meteostudio_" target="_blank" rel="noopener noreferrer"><span class="mega__name">Meteo Studio</span><span class="mega__meta">&mdash;</span></a>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░ HOME — the content is the news, laid out as a front-page mosaic ░░ -->
+  <main class="paper" id="top">
+
+    <a id="news"></a>
+    <section class="front" aria-label="News">
+
+      {lead && (
+        <article class="lead">
+          <a class="lead__media" href={lead.link} target="_blank" rel="noopener noreferrer">
+            <img src={imgSrc(lead.image)} alt={lead.title} loading="eager" decoding="async" />
+          </a>
+          <div class="lead__body">
+            <span class="lead__date">{monthYear(lead.date)}</span>
+            <h2 class="lead__title">{lead.title}</h2>
+            {lead.excerpt && <p class="lead__dek">{lead.excerpt}</p>}
+            <a class="lead__go" href={lead.link} target="_blank" rel="noopener noreferrer">View +</a>
+          </div>
+        </article>
+      )}
+
+      <div class="rule rule--hair front__split"></div>
+
+      <div class="mosaic" id="mosaic">
+        {rest.map((item) => (
+          <article class="story" data-size={item.size ?? 'normal'}>
+            <div class="story__inner">
+              <a class="story__media" href={item.link} target="_blank" rel="noopener noreferrer">
+                <img src={imgSrc(item.image)} alt={item.title} loading="lazy" decoding="async" />
+              </a>
+              <span class="story__date">{monthYear(item.date)}</span>
+              <h3 class="story__title">{item.title}</h3>
+              <a class="story__go" href={item.link} target="_blank" rel="noopener noreferrer">View +</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <footer class="colophon">
+      <span>&copy;2026 — Taller Enrique Olvera</span>
+      <span class="colophon__credit">Murlender Design &times; Nico</span>
+    </footer>
+  </main>
+
+  <script src="/script.js" is:inline></script>
+</body>
+</html>

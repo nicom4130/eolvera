@@ -1,0 +1,103 @@
+import { config, collection, fields } from '@keystatic/core';
+import { createElement } from 'react';
+
+// ============================================================
+//  KEYSTATIC CONFIG — Enrique Olvera · News admin
+// ============================================================
+//
+//  Local mode: content lives in this repo (src/content/news/*) and images in
+//  public/images/news. Works with NO accounts — open /keystatic to edit.
+//
+//  >>> SWITCH TO GITHUB MODE LATER (after the GitHub App / OAuth is set up): <<<
+//      storage: {
+//        kind: 'github',
+//        repo: 'newseolvera/enriqueolvera-site',
+//      },
+//  Then create a GitHub App for OAuth (Keystatic docs -> "GitHub mode") and add
+//  the App's KEYSTATIC_GITHUB_CLIENT_ID / KEYSTATIC_GITHUB_CLIENT_SECRET /
+//  KEYSTATIC_SECRET env vars in Vercel. Nothing else in this file changes.
+//
+export default config({
+  storage: {
+    kind: 'local',
+  },
+
+  ui: {
+    // Keystatic's admin uses its own design system; what we CAN brand is the
+    // wordmark + name. The mark is a serif monogram in the site's display family
+    // (Bodoni Moda, falling back to Georgia inside the admin).
+    brand: {
+      name: 'Enrique Olvera',
+      mark: () =>
+        createElement(
+          'span',
+          {
+            style: {
+              fontFamily: '"Bodoni Moda", Georgia, "Times New Roman", serif',
+              fontSize: '20px',
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              lineHeight: 1,
+            },
+          },
+          'EO'
+        ),
+    },
+  },
+
+  collections: {
+    news: collection({
+      label: 'News',
+      slugField: 'title',
+      path: 'src/content/news/*',
+      entryLayout: 'form',
+      columns: ['title', 'date'],
+      schema: {
+        image: fields.image({
+          label: 'Imagen',
+          description: 'Imagen de la noticia (se respeta su proporción original).',
+          directory: 'public/images/news',
+          publicPath: '/images/news/',
+          validation: { isRequired: true },
+        }),
+        title: fields.slug({
+          name: {
+            label: 'Título',
+            validation: { isRequired: true },
+          },
+        }),
+        date: fields.date({
+          label: 'Fecha',
+          description: 'Ordena las notas: la más reciente va primero (salvo que fijes otra como principal).',
+        }),
+        pinned: fields.checkbox({
+          label: 'Fijar como nota principal',
+          description:
+            'La pone arriba, grande, como portada (reemplaza a la más reciente). Si marcás varias, gana la más reciente.',
+          defaultValue: false,
+        }),
+        size: fields.select({
+          label: 'Tamaño en el mosaico',
+          description: 'Cuánto ancho ocupa la nota en la grilla de News (no aplica si es la nota principal).',
+          options: [
+            { label: 'Normal — 1 columna', value: 'normal' },
+            { label: 'Destacada — 2 columnas', value: 'featured' },
+            { label: 'Full — ancho completo', value: 'full' },
+          ],
+          defaultValue: 'normal',
+        }),
+        excerpt: fields.text({
+          label: 'Resumen (máx. ~200 palabras)',
+          description: 'Texto breve que acompaña a la nota destacada.',
+          multiline: true,
+          validation: { length: { max: 1200 } },
+        }),
+        link: fields.url({
+          label: 'Link externo',
+          description: 'El botón "View +" abre este enlace en otra pestaña.',
+          validation: { isRequired: true },
+        }),
+      },
+    }),
+  },
+});
