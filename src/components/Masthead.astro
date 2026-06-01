@@ -14,6 +14,10 @@
       <span class="lang__sep" aria-hidden="true">/</span>
       <button class="lang__opt" data-lang-set="es" type="button" aria-pressed="false">ES</button>
     </div>
+    <!-- hamburger — mobile only (CSS hides it on desktop) -->
+    <button class="mham" id="mham" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mnav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 
   <!-- section ribbon — NYT horizontal nav. Hovering a group drops a
@@ -117,6 +121,73 @@
         </div>
       </section>
 
+    </div>
+  </div>
+
+  <!-- ░░ MOBILE MENU — accordion drawer (mobile only). Mirrors the mega's
+       directory; the desktop mega and this list are kept in sync by hand. ░░ -->
+  <div class="mnav" id="mnav" aria-hidden="true">
+    <div class="mnav__inner">
+
+      <div class="macc" data-acc>
+        <button class="macc__head" type="button" aria-expanded="false">Casamata</button>
+        <div class="macc__body">
+          <a class="macc__item" href="https://www.pujol.com.mx" target="_blank" rel="noopener noreferrer">Pujol<em>Mexico City</em></a>
+          <a class="macc__item" href="https://www.pujol.com.mx/en/molino-el-pujol" target="_blank" rel="noopener noreferrer">Molino &ldquo;El Pujol&rdquo;<em>Mexico City</em></a>
+          <a class="macc__item" href="#">Pujol Central<em data-i18n="autumn26">Opening Autumn 2026</em></a>
+          <a class="macc__item" href="#">pujol.itto<em data-i18n="spring26">Opening Spring 2026</em></a>
+          <a class="macc__item" href="#">Hoster&iacute;a Pujol<em data-i18n="open28">Opening 2028</em></a>
+          <a class="macc__item" href="https://www.ticuchi.mx/" target="_blank" rel="noopener noreferrer">Ticuchi<em>Mexico City</em></a>
+          <a class="macc__item" href="https://cosmenyc.com" target="_blank" rel="noopener noreferrer">Cosme<em>New York</em></a>
+          <a class="macc__item" href="#">Cosme Bar<em data-i18n="autumn26">Opening Autumn 2026</em></a>
+          <a class="macc__item" href="https://www.essetaco.com" target="_blank" rel="noopener noreferrer">Esse Taco<em>&mdash;</em></a>
+          <a class="macc__item" href="https://damiandtla.com" target="_blank" rel="noopener noreferrer">Damian<em>Los Angeles</em></a>
+          <a class="macc__item" href="https://www.instagram.com/ditroitdtla" target="_blank" rel="noopener noreferrer">Ditroit<em>Los Angeles</em></a>
+          <a class="macc__item" href="#">San Damian<em data-i18n="summer26">Opening Summer 2026</em></a>
+        </div>
+      </div>
+
+      <div class="macc" data-acc>
+        <button class="macc__head" type="button" aria-expanded="false">Casa&nbsp;Teo</button>
+        <div class="macc__body">
+          <a class="macc__item" href="#">Casa Teo 1<em>Mexico City</em></a>
+          <a class="macc__item" href="#">Casa Teo 2<em>Mexico City</em></a>
+          <a class="macc__item" href="#">Takonoma<em data-i18n="shop">Shop</em></a>
+        </div>
+      </div>
+
+      <div class="macc" data-acc>
+        <button class="macc__head" type="button" aria-expanded="false">Criollo</button>
+        <div class="macc__body">
+          <a class="macc__item" href="https://www.instagram.com/criollo_oax" target="_blank" rel="noopener noreferrer">Criollo Oaxaca<em>Oaxaca</em></a>
+          <a class="macc__item" href="https://www.airbnb.com/rooms/37160054" target="_blank" rel="noopener noreferrer">Casa Criollo<em>Oaxaca</em></a>
+          <a class="macc__item" href="#">Refugio<em data-i18n="open27">Opening 2027</em></a>
+          <a class="macc__item" href="#">San Jos&eacute; del Criollo<em data-i18n="summer26">Opening Summer 2026</em></a>
+        </div>
+      </div>
+
+      <div class="macc" data-acc>
+        <button class="macc__head" type="button" aria-expanded="false">Teo</button>
+        <div class="macc__body">
+          <a class="macc__item" href="/consulting">Consulting<em>Worldwide</em></a>
+          <a class="macc__item" href="https://www.mantarestaurant.com" target="_blank" rel="noopener noreferrer">Manta<em>Los Cabos</em></a>
+          <a class="macc__item" href="https://www.oneandonlyresorts.com/mandarina/dining/carao" target="_blank" rel="noopener noreferrer">Carao<em>Mandarina</em></a>
+        </div>
+      </div>
+
+      <div class="macc" data-acc>
+        <button class="macc__head" type="button" aria-expanded="false">Projects</button>
+        <div class="macc__body">
+          <a class="macc__item" href="https://roselosangeles.com" target="_blank" rel="noopener noreferrer">Rose Los Angeles<em>Los Angeles</em></a>
+          <a class="macc__item" href="https://www.elpoaig.com/en" target="_blank" rel="noopener noreferrer">La Poaig<em>&mdash;</em></a>
+          <a class="macc__item" href="https://manojomezcal.com" target="_blank" rel="noopener noreferrer">Manojo Mezcal<em>&mdash;</em></a>
+          <a class="macc__item" href="https://www.instagram.com/meteostudio_" target="_blank" rel="noopener noreferrer">Meteo Studio<em>&mdash;</em></a>
+        </div>
+      </div>
+
+      <a class="mnav__link" href="/#news" data-i18n="news">News</a>
+      <a class="mnav__link" href="/about" data-i18n="about">About</a>
+      <a class="mnav__link" href="/consulting" data-i18n="consulting">Consulting</a>
     </div>
   </div>
 </header>

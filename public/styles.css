@@ -291,6 +291,67 @@ body::after {
 }
 
 /* ===========================================================
+   MOBILE MENU — hamburger (top-left) + full-screen accordion drawer.
+   Hidden on desktop; shown ≤760 (the ribbon/mega hide there).
+   =========================================================== */
+.mham { display: none; }
+.mham {
+  position: absolute; top: 0; left: 0;
+  width: 28px; height: 20px; padding: 0; border: 0; background: transparent; cursor: pointer; z-index: 210;
+}
+.mham span {
+  position: absolute; left: 0; right: 0; height: 1.5px; background: var(--ink);
+  transition: transform .3s var(--ease), opacity .2s var(--ease);
+}
+.mham span:nth-child(1) { top: 1px; }
+.mham span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.mham span:nth-child(3) { bottom: 1px; }
+.mham.is-active span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+.mham.is-active span:nth-child(2) { opacity: 0; }
+.mham.is-active span:nth-child(3) { bottom: auto; top: 50%; transform: translateY(-50%) rotate(-45deg); }
+
+.mnav {
+  position: fixed; inset: 0; z-index: 200; background: var(--paper);
+  transform: translateY(-12px); opacity: 0; visibility: hidden;
+  transition: transform .4s var(--ease), opacity .3s var(--ease), visibility .4s;
+  overflow-y: auto; padding: clamp(4.5rem, 15vh, 6.5rem) var(--pad) 3rem;
+}
+.mnav.is-open { transform: translateY(0); opacity: 1; visibility: visible; }
+.mnav__inner { display: flex; flex-direction: column; }
+html.mnav-open { overflow: hidden; }
+
+.macc { border-bottom: 1px solid var(--line); }
+.macc__head {
+  width: 100%; text-align: left; background: transparent; border: 0; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; padding: 1.05rem 0;
+  font-family: var(--display); font-size: 1.45rem; color: var(--ink);
+}
+.macc__head::after { content: "+"; font-family: var(--sans); font-size: 1.15rem; color: var(--grey); }
+.macc.is-open .macc__head::after { content: "\2212"; }
+.macc__body { max-height: 0; overflow: hidden; transition: max-height .35s var(--ease); }
+.macc__item {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  padding: .5rem 0 .5rem .1rem;
+  font-family: var(--sans); font-size: .95rem; color: var(--ink);
+}
+.macc__item:last-child { padding-bottom: 1rem; }
+.macc__item em { font-style: normal; font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--grey); white-space: nowrap; }
+.mnav__link {
+  padding: 1.05rem 0; border-bottom: 1px solid var(--line);
+  font-family: var(--display); font-size: 1.45rem; color: var(--ink);
+}
+
+/* ===========================================================
+   IMAGE FADE-IN — subtle entrance on content imagery.
+   `backwards` so it doesn't override the news hover opacity.
+   =========================================================== */
+@keyframes imgFade { from { opacity: 0; } to { opacity: 1; } }
+.story__media img, .about__photo, .lead__media img { animation: imgFade .8s var(--ease) backwards; }
+@media (prefers-reduced-motion: reduce) {
+  .story__media img, .about__photo, .lead__media img { animation: none; }
+}
+
+/* ===========================================================
    SUB-NAV (About: Bio / Contact)
    =========================================================== */
 html { scroll-behavior: smooth; }
@@ -355,18 +416,12 @@ html { scroll-behavior: smooth; }
 @media (max-width: 760px) {
   .lead { grid-template-columns: 1fr; gap: 1.1rem; }
   .lead__body { align-self: start; }
-  .mega__panel.is-active { grid-template-columns: 1fr; gap: .2rem; }
-  .mega__preview { display: none; }   /* no hover on touch — drop the preview */
-  .mega__col--right { text-align: left; }
-  .mega__col--right .mega__item { align-items: flex-start; }
-  .mega { max-height: 70vh; overflow-y: auto; }
-  .ribbon { gap: .9rem 1.1rem; }
+  /* the horizontal ribbon + hover mega are replaced by the hamburger drawer */
+  .ribbon, .mega { display: none; }
+  .mham { display: block; }
 }
 @media (max-width: 560px) {
   .mosaic { columns: 1; }
-  .ribbon__sep { display: none; }
-  .masthead__top { display: flex; flex-direction: column-reverse; align-items: center; gap: .5rem; }
-  .lang { position: static; transform: none; }
 }
 
 /* ===========================================================

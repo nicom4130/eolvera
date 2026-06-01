@@ -243,6 +243,48 @@
   }
 
   /* ---------------------------------------------------------
+     Mobile menu — hamburger opens a drawer; each group is an
+     accordion row that expands its directory.
+     --------------------------------------------------------- */
+  var mham = doc.getElementById("mham");
+  var mnav = doc.getElementById("mnav");
+
+  function setMnav(open) {
+    if (!mnav || !mham) return;
+    mnav.classList.toggle("is-open", open);
+    mham.classList.toggle("is-active", open);
+    mham.setAttribute("aria-expanded", open ? "true" : "false");
+    mnav.setAttribute("aria-hidden", open ? "false" : "true");
+    doc.documentElement.classList.toggle("mnav-open", open);
+  }
+
+  if (mham && mnav) {
+    mham.addEventListener("click", function () {
+      setMnav(!mnav.classList.contains("is-open"));
+    });
+
+    // accordion rows
+    var heads = mnav.querySelectorAll(".macc__head");
+    for (var hi = 0; hi < heads.length; hi++) {
+      heads[hi].addEventListener("click", function () {
+        var open = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", open ? "false" : "true");
+        if (this.parentNode) this.parentNode.classList.toggle("is-open", !open);
+        var body = this.nextElementSibling;
+        if (body) body.style.maxHeight = open ? "0px" : body.scrollHeight + "px";
+      });
+    }
+
+    // tapping any link closes the drawer
+    mnav.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a");
+      if (a) setMnav(false);
+    });
+
+    doc.addEventListener("keydown", function (e) { if (e.key === "Escape") setMnav(false); });
+  }
+
+  /* ---------------------------------------------------------
      Boot
      --------------------------------------------------------- */
   applyLang("en");
