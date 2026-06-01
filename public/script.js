@@ -195,6 +195,54 @@
   });
 
   /* ---------------------------------------------------------
+     Contact / Consulting forms — post to our own /api/contact.
+     Anti-spam is invisible: a _t timestamp stamped here on load
+     (timing trap) + the hidden "company" honeypot. No external captcha.
+     --------------------------------------------------------- */
+  var cforms = doc.querySelectorAll("[data-cform]");
+  for (var ci = 0; ci < cforms.length; ci++) {
+    (function (form) {
+      var tsEl = form.querySelector("[data-cform-ts]");
+      if (tsEl) tsEl.value = String(Date.now());
+      var val = function (n) { var el = form.elements[n]; return el ? el.value : ""; };
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var msg = form.querySelector("[data-cform-msg]");
+        var btn = form.querySelector(".cform__submit");
+        var setMsg = function (text, cls) { if (msg) { msg.textContent = text; msg.className = "cform__msg" + (cls ? " " + cls : ""); } };
+
+        if (val("company")) return;            // honeypot tripped → ignore
+        if (btn) btn.disabled = true;
+        setMsg("Sending…", "");
+
+        fetch("/api/contact", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            name: val("name"), email: val("email"), message: val("message"),
+            company: val("company"), _t: Number(val("_t")), source: val("source")
+          })
+        })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok && d && d.ok, d: d || {} }; }); })
+          .then(function (res) {
+            if (res.ok) {
+              form.reset();
+              if (tsEl) tsEl.value = String(Date.now());
+              setMsg("Thank you — we’ll be in touch.", "is-ok");
+            } else if (res.d.error === "not_configured") {
+              setMsg("Form isn’t live yet — please email us directly.", "is-err");
+            } else {
+              setMsg("Something went wrong — please email us directly.", "is-err");
+            }
+          })
+          .catch(function () { setMsg("Network error — please email us directly.", "is-err"); })
+          .finally(function () { if (btn) btn.disabled = false; });
+      });
+    })(cforms[ci]);
+  }
+
+  /* ---------------------------------------------------------
      Boot
      --------------------------------------------------------- */
   applyLang("en");

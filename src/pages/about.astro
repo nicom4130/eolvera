@@ -1,12 +1,13 @@
 ---
 // ============================================================
-//  ENRIQUE OLVERA — About
-//  Static page. Ported from proposal 3 (NICO'S PROPOSSAL - 3) — the layout the
-//  client chose: bio text on the left, a portrait filling the right column.
-//  The portrait column is a single FIXED photo (no slideshow) — the first image
-//  of the original set, olvera-about-04.webp. Shares the masthead via <Masthead/>.
+//  ENRIQUE OLVERA — About (Bio + Contact)
+//  Bio ported from proposal 3 (text left, single fixed portrait right).
+//  Two submenus (Bio / Contact) via a sticky sub-nav; Contact uses the framed
+//  form posting to our own /api/contact. Masthead/Footer shared.
 // ============================================================
 import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 ---
 
 <!DOCTYPE html>
@@ -27,8 +28,14 @@ import Masthead from '../components/Masthead.astro';
 
   <Masthead />
 
+  <nav class="subnav" aria-label="About sections">
+    <a class="subnav__link" href="#bio">Bio</a>
+    <a class="subnav__link" href="#contact">Contact</a>
+  </nav>
+
   <main id="top">
-    <section class="view-about" aria-label="About Enrique Olvera">
+
+    <section class="view-about" id="bio" aria-label="Biography">
       <div class="about">
 
         <div class="about__text">
@@ -49,7 +56,19 @@ import Masthead from '../components/Masthead.astro';
 
       </div>
     </section>
+
+    <section class="cpage cpage--contact" id="contact" aria-label="Contact">
+      <div class="cbox">
+        <h2 class="cbox__title">Contact</h2>
+        <p class="cbox__lead">For general enquiries, collaborations and press, reach out below or write to us directly.</p>
+        <ContactForm source="about-contact" submit="Send" />
+        <p class="cbox__note">General enquiries &mdash; <a href="mailto:news.eolvera@gmail.com">news.eolvera@gmail.com</a></p>
+      </div>
+    </section>
+
   </main>
+
+  <Footer />
 
   <script src="/script.js" is:inline></script>
 </body>

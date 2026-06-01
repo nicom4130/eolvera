@@ -241,14 +241,20 @@ body::after {
   font-size: clamp(1.25rem, 1.8vw, 1.65rem); line-height: 1.12; letter-spacing: -.005em;
   margin: .45rem 0 .7rem;
 }
-/* colophon */
+/* colophon — shared footer (lives outside .paper, full-width with --pad) */
 .colophon {
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
   margin-top: clamp(2.5rem, 5vw, 5rem);
-  padding: 1.6rem 0 2.4rem;
+  padding: 1.6rem var(--pad) 2.4rem;
   border-top: 1px solid var(--line);
   font-family: var(--sans); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--grey);
 }
+.colophon__social { display: flex; gap: 1.4rem; }
+.colophon__social a { color: var(--grey); transition: color .25s var(--ease); }
+.colophon__social a:hover { color: var(--ink); }
+.colophon__copy { order: 2; }
+.colophon__credit { order: 3; }
+.colophon__social { order: 1; }
 
 /* ===========================================================
    ABOUT (page) — ported from proposal 3. Text column on the left,
@@ -283,6 +289,62 @@ body::after {
   .about__text { padding: clamp(1.6rem, 5vw, 2.6rem) var(--pad) clamp(2rem, 6vw, 3.5rem); }
   .about__text > * { max-width: none; }
 }
+
+/* ===========================================================
+   SUB-NAV (About: Bio / Contact)
+   =========================================================== */
+html { scroll-behavior: smooth; }
+.subnav {
+  display: flex; gap: 1.6rem;
+  padding: .85rem var(--pad);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--sans); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+}
+.subnav__link { color: var(--grey); transition: color .25s var(--ease); }
+.subnav__link:hover { color: var(--ink); }
+#bio, #contact { scroll-margin-top: 4.5rem; }
+
+/* ===========================================================
+   FORMS — Consulting + About/Contact. Framed box (proposal-3 style),
+   posts to our own /api/contact. Honeypot is visually hidden.
+   =========================================================== */
+.cpage { padding: clamp(2.5rem, 7vh, 6rem) var(--pad); display: flex; justify-content: center; }
+.cpage--contact { border-top: 1px solid var(--line); }
+.cbox {
+  width: 100%; max-width: 620px;
+  border: 1px solid var(--line);
+  padding: clamp(1.6rem, 4vw, 3rem);
+  background: var(--paper);
+}
+.cbox__title { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1; margin: 0 0 1rem; }
+.cbox__lead { font-family: var(--sans); font-size: clamp(.95rem, 1.2vw, 1.05rem); line-height: 1.7; color: var(--ink-2); margin: 0 0 2rem; max-width: 52ch; }
+.cbox__note { margin-top: 1.4rem; font-family: var(--sans); font-size: .72rem; letter-spacing: .04em; color: var(--grey); }
+.cbox__note a { color: var(--ink); border-bottom: 1px solid var(--line); }
+.cbox__note a:hover { border-color: var(--ink); }
+
+.cform { display: grid; gap: 1.1rem; }
+.cform__field { display: grid; gap: .4rem; }
+.cform__label { font-family: var(--sans); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); }
+.cform__input {
+  font-family: var(--sans); font-size: .95rem; color: var(--ink);
+  background: transparent; border: 0; border-bottom: 1px solid var(--line);
+  padding: .55rem 0; transition: border-color .25s var(--ease);
+}
+.cform__input:focus { outline: none; border-bottom-color: var(--ink); }
+.cform__textarea { resize: vertical; min-height: 5.5rem; line-height: 1.6; }
+.cform__hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cform__submit {
+  justify-self: start; margin-top: .6rem;
+  font-family: var(--sans); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink); background: transparent;
+  border: 1px solid var(--ink); padding: .7rem 1.6rem; cursor: pointer;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.cform__submit:hover { background: var(--ink); color: var(--paper); }
+.cform__submit:disabled { opacity: .5; cursor: default; }
+.cform__msg { min-height: 1.2em; font-family: var(--sans); font-size: .78rem; color: var(--grey); }
+.cform__msg.is-ok { color: #2f6b3a; }
+.cform__msg.is-err { color: #9a3434; }
 
 /* ===========================================================
    RESPONSIVE

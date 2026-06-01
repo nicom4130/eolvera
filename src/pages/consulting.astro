@@ -1,0 +1,45 @@
+---
+// ============================================================
+//  ENRIQUE OLVERA — Consulting
+//  Copy ported from proposal 3. Framed contact form (our own /api/contact).
+// ============================================================
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enrique Olvera — Consulting</title>
+  <meta name="description" content="Comprehensive consulting by Enrique Olvera — conceptualization, creative support and feasibility analysis, in Mexico and abroad." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <Masthead />
+
+  <main class="paper" id="top">
+    <section class="cpage" aria-label="Consulting">
+      <div class="cbox">
+        <h1 class="cbox__title">Consulting</h1>
+        <p class="cbox__lead">In addition to the creative direction of the hospitality projects grouped under Casamata, Enrique Olvera&rsquo;s experience and his interest in sharing the knowledge gained have led to comprehensive consulting for projects that require it. This includes conceptualization, creative support, and feasibility analysis, whether it be for overall proposals, context, or operations, both in Mexico and abroad.</p>
+        <ContactForm source="consulting" submit="Get in touch" />
+        <p class="cbox__note">Press &amp; enquiries &mdash; <a href="mailto:news.eolvera@gmail.com">news.eolvera@gmail.com</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <script src="/script.js" is:inline></script>
+</body>
+</html>

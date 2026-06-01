@@ -1,0 +1,31 @@
+---
+// Framed contact form (proposal-3 style). Posts to our own /api/contact.
+// Anti-spam is invisible: honeypot "company" + a _t timestamp stamped by JS on
+// load (see script.js). No external captcha, no form service.
+const { source = 'contact', submit = 'Get in touch' } = Astro.props;
+---
+<form class="cform" data-cform>
+  <input type="hidden" name="source" value={source} />
+  <input type="hidden" name="_t" value="" data-cform-ts />
+
+  <div class="cform__field">
+    <label class="cform__label" for={`${source}-name`}>Name</label>
+    <input class="cform__input" id={`${source}-name`} name="name" type="text" autocomplete="name" required />
+  </div>
+  <div class="cform__field">
+    <label class="cform__label" for={`${source}-email`}>Email</label>
+    <input class="cform__input" id={`${source}-email`} name="email" type="email" autocomplete="email" required />
+  </div>
+  <div class="cform__field">
+    <label class="cform__label" for={`${source}-message`}>Message</label>
+    <textarea class="cform__input cform__textarea" id={`${source}-message`} name="message" rows="4" required></textarea>
+  </div>
+
+  <!-- honeypot — hidden from humans, visible to bots -->
+  <div class="cform__hp" aria-hidden="true">
+    <label>Company<input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <button class="cform__submit" type="submit"><span>{submit}</span></button>
+  <p class="cform__msg" role="status" aria-live="polite" data-cform-msg></p>
+</form>

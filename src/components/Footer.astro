@@ -1,0 +1,15 @@
+---
+// Shared footer — social + general-inquiries mailto, on every page.
+// MAILTO is news.eolvera@gmail.com for now; swap to hola@enriqueolvera.com once
+// that mailbox exists on the real domain.
+const MAILTO = 'news.eolvera@gmail.com';
+---
+<footer class="colophon">
+  <nav class="colophon__social" aria-label="Social">
+    <a href="https://www.instagram.com/enriqueolveraf/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://open.spotify.com/user/1137573915" target="_blank" rel="noopener noreferrer">Spotify</a>
+    <a href={`mailto:${MAILTO}`}>Email</a>
+  </nav>
+  <span class="colophon__copy">&copy;2026 — Taller Enrique Olvera</span>
+  <span class="colophon__credit">Murlender Design &times; Nico</span>
+</footer>

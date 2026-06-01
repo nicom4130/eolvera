@@ -6,6 +6,7 @@
 //  read at build time. Ordered by date desc; the pinned one (or newest) leads.
 // ============================================================
 import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
 
@@ -95,11 +96,9 @@ function monthYear(iso?: string | null) {
       </div>
     </section>
 
-    <footer class="colophon">
-      <span>&copy;2026 — Taller Enrique Olvera</span>
-      <span class="colophon__credit">Murlender Design &times; Nico</span>
-    </footer>
   </main>
+
+  <Footer />
 
   <script src="/script.js" is:inline></script>
 </body>
