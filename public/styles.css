@@ -136,16 +136,18 @@ body::after {
 .mega__panel { display: none; }
 .mega__panel.is-active {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(300px, 35%, 525px) minmax(0, 1fr);  /* links · image · links (image +25%) */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) clamp(300px, 35%, 525px);  /* links · links · image */
   gap: clamp(1.4rem, 3.5vw, 3.5rem);
   align-items: start;
 }
 
-/* directory split either side of the centred image; the right column is
-   right-aligned so the link you roll over sits next to the preview. */
+/* directory split into two left-aligned text columns, followed by the preview. */
 .mega__col { display: flex; flex-direction: column; }
-.mega__col--right { text-align: right; }
-.mega__col--right .mega__item { align-items: flex-end; }
+.mega__col--right {
+  order: 2;
+  text-align: left;
+}
+.mega__col--right .mega__item { align-items: flex-start; }
 .mega__item {
   display: flex; flex-direction: column; gap: .25rem;
   padding: .8rem 0;
@@ -163,6 +165,7 @@ body::after {
 /* centre column: empty at rest, shows only a hovered restaurant's photo.
    Two stacked layers crossfade as the pointer moves across links. */
 .mega__preview {
+  order: 3;
   position: relative; align-self: stretch;   /* fill the tallest column's height */
   overflow: hidden;
 }
