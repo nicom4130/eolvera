@@ -289,16 +289,40 @@
   var archiveGrid = doc.querySelector("[data-news-grid]");
   if (filterBar && archiveGrid) {
     var cards = Array.prototype.slice.call(archiveGrid.querySelectorAll("[data-category]"));
+    var canMotion = !window.matchMedia || !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     filterBar.addEventListener("click", function (e) {
       var btn = e.target.closest && e.target.closest("[data-filter]");
       if (!btn) return;
+      if (btn.classList.contains("is-active")) return;
       var filter = btn.getAttribute("data-filter");
+      var first = new Map();
+      if (canMotion) {
+        cards.forEach(function (card) {
+          if (!card.classList.contains("is-hidden")) first.set(card, card.getBoundingClientRect());
+        });
+      }
       filterBar.querySelectorAll("[data-filter]").forEach(function (b) {
         b.classList.toggle("is-active", b === btn);
       });
       cards.forEach(function (card) {
         var match = filter === "all" || card.getAttribute("data-category") === filter;
         card.classList.toggle("is-hidden", !match);
+      });
+      if (!canMotion) return;
+      cards.forEach(function (card) {
+        if (card.classList.contains("is-hidden")) return;
+        var before = first.get(card);
+        var after = card.getBoundingClientRect();
+        var dx = before ? before.left - after.left : 0;
+        var dy = before ? before.top - after.top : 10;
+        var startOpacity = before ? 1 : 0;
+        card.animate(
+          [
+            { transform: "translate(" + dx + "px, " + dy + "px)", opacity: startOpacity },
+            { transform: "translate(0, 0)", opacity: 1 }
+          ],
+          { duration: 420, easing: "cubic-bezier(.16, 1, .3, 1)" }
+        );
       });
     });
   }

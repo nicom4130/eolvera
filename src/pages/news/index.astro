@@ -68,7 +68,7 @@ const categories = Array.from(new Set(posts.map((post) => post.category || 'rest
 
     <section class="archive-grid" aria-label="News archive" data-news-grid>
       {posts.map((post) => (
-        <article class:list={['archive-card', post.size === 'full' && 'archive-card--full']} data-category={post.category || 'restaurants'}>
+        <article class="archive-card" data-category={post.category || 'restaurants'}>
           <a class="archive-card__link" href={`/news/${post.slug}/`}>
             <figure class="archive-card__figure">
               <img src={imgSrc(post.image)} alt="" loading="lazy" decoding="async" />

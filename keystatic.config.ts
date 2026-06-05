@@ -87,15 +87,6 @@ export default config({
             'La coloca arriba, en grande, como portada (reemplaza a la más reciente). Si seleccionas varias, se usa la más reciente.',
           defaultValue: false,
         }),
-        size: fields.select({
-          label: 'Tamaño en el mosaico',
-          description: 'Normal entra en la cuadrícula de columnas; Ancho completo ocupa una fila entera para ella sola. (No aplica si es la nota principal.)',
-          options: [
-            { label: 'Normal — en la cuadrícula', value: 'normal' },
-            { label: 'Ancho completo — fila propia', value: 'full' },
-          ],
-          defaultValue: 'normal',
-        }),
         excerpt: fields.text({
           label: 'Resumen (máx. ~200 palabras)',
           description: 'Texto breve que acompaña a la nota destacada.',

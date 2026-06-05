@@ -366,7 +366,6 @@ body::after {
   border-bottom: 1px solid var(--line);
 }
 .archive-card.is-hidden { display: none; }
-.archive-card--full { grid-column: span 2; }
 .archive-card__link {
   display: grid;
   min-height: 100%;
@@ -479,11 +478,7 @@ body::after {
     grid-template-columns: 1fr;
     border-left: 0;
   }
-  .archive-card,
-  .archive-card--full {
-    grid-column: auto;
-    border-right: 0;
-  }
+  .archive-card { border-right: 0; }
 }
 /* colophon — shared footer (lives outside .paper, full-width with --pad) */
 .colophon {
@@ -496,8 +491,7 @@ body::after {
 .colophon__social { display: flex; gap: 1.4rem; }
 .colophon__social a { color: var(--grey); transition: color .25s var(--ease); }
 .colophon__social a:hover { color: var(--ink); }
-.colophon__copy { order: 2; }
-.colophon__credit { order: 3; }
+.colophon__copy { order: 3; margin-left: auto; }
 .colophon__social { order: 1; }
 body.home .colophon { margin-top: 0; }
 
