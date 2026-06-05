@@ -14,10 +14,15 @@ const reader = createReader(process.cwd(), keystaticConfig);
 
 const entries = await reader.collections.news.all();
 
-// newest first; the most recent is the lead, the rest fill the mosaic
+// newest first; pinned stories still rise to the front, but the home shows a
+// strict four-story editorial row.
 const news = entries
   .map((e) => e.entry)
-  .sort((a, b) => ((a.date ?? '') < (b.date ?? '') ? 1 : -1));
+  .sort((a, b) => {
+    const pinned = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
+    if (pinned) return pinned;
+    return (a.date ?? '') < (b.date ?? '') ? 1 : -1;
+  });
 
 // The Keystatic image field stores only the filename; resolve it against the
 // field's publicPath so the <img src> points at the real file under /public.
@@ -25,17 +30,8 @@ const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
   !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
 
-// The editor can pin any story as the front-page lead; the most recent pinned
-// one wins. With nothing pinned we fall back to the newest story (old behavior).
-const lead = news.find((n) => n.pinned) ?? news[0];
-const rest = news.filter((n) => n !== lead);
+const featuredNews = news.slice(0, 4);
 
-// "April 2026" style label from an ISO date string
-function monthYear(iso?: string | null) {
-  if (!iso) return '';
-  const d = new Date(iso + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-}
 ---
 
 <!DOCTYPE html>
@@ -45,6 +41,8 @@ function monthYear(iso?: string | null) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Enrique Olvera</title>
   <meta name="description" content="The gastronomic universe of Enrique Olvera — news, restaurants and projects." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="/favicon.ico" />
 
   <!-- Type system: Bodoni Moda (display Didone) + locally-bundled Sofia Pro
        (the only sans — used for body and all labels). -->
@@ -54,43 +52,25 @@ function monthYear(iso?: string | null) {
   <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
   <link rel="stylesheet" href="/styles.css" />
 </head>
-<body>
+<body class="home">
 
   <Masthead />
 
-  <!-- ░░ HOME — the content is the news, laid out as a front-page mosaic ░░ -->
+  <!-- ░░ HOME — the content is a four-column news front page ░░ -->
   <main class="paper" id="top">
 
     <a id="news"></a>
     <section class="front" aria-label="News">
-
-      {lead && (
-        <article class="lead">
-          <a class="lead__media" href={lead.link} target="_blank" rel="noopener noreferrer">
-            <img src={imgSrc(lead.image)} alt={lead.title} loading="eager" decoding="async" />
-          </a>
-          <div class="lead__body">
-            <span class="lead__date">{monthYear(lead.date)}</span>
-            <h2 class="lead__title">{lead.title}</h2>
-            {lead.excerpt && <p class="lead__dek">{lead.excerpt}</p>}
-            <a class="lead__go" href={lead.link} target="_blank" rel="noopener noreferrer">View +</a>
-          </div>
-        </article>
-      )}
-
-      <div class="rule rule--hair front__split"></div>
-
-      <div class="mosaic" id="mosaic">
-        {rest.map((item) => (
-          <article class="story" data-size={item.size ?? 'normal'}>
-            <div class="story__inner">
-              <a class="story__media" href={item.link} target="_blank" rel="noopener noreferrer">
-                <img src={imgSrc(item.image)} alt={item.title} loading="lazy" decoding="async" />
-              </a>
-              <span class="story__date">{monthYear(item.date)}</span>
-              <h3 class="story__title">{item.title}</h3>
-              <a class="story__go" href={item.link} target="_blank" rel="noopener noreferrer">View +</a>
-            </div>
+      <div class="news-grid" id="mosaic">
+        {featuredNews.map((item) => (
+          <article class="story" style={`--story-image: url("${imgSrc(item.image)}");`}>
+            <a class="story__inner" href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.title}>
+              <div class="story__text">
+                <h3 class="story__title">{item.title}</h3>
+                <span class="story__rule" aria-hidden="true"></span>
+                {item.excerpt && <p class="story__expert">{item.excerpt}</p>}
+              </div>
+            </a>
           </article>
         ))}
       </div>

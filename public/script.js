@@ -95,9 +95,7 @@
   var plainLinks = Array.prototype.slice.call(doc.querySelectorAll(".ribbon__link:not([data-mega])"));
   var hideTimer = null;
 
-  /* preview pane — the third column. Hovering a restaurant swaps its image in;
-     items with no photo (no data-img) fall back to a neutral placeholder that
-     shows the restaurant's name. Each panel resets to its group default. */
+  /* preview pane — the third column. Hovering a restaurant swaps its image in. */
   function setupPreview(panel) {
     var fig = panel.querySelector(".mega__preview");
     if (!fig) return function () {};
@@ -126,8 +124,8 @@
     panel.querySelectorAll(".mega__item").forEach(function (item) {
       function onEnter() {
         var src = item.getAttribute("data-img");
-        if (src) crossfadeTo(src);   // photo → show it
-        else clear();                // no photo → show nothing
+        if (src) crossfadeTo(src);
+        else clear();
       }
       item.addEventListener("mouseenter", onEnter);
       item.addEventListener("focus", onEnter);

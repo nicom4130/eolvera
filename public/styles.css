@@ -48,6 +48,11 @@ body {
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+body.home {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
@@ -71,6 +76,15 @@ body::after {
   position: relative;       /* containing block for the mega dropdown */
   max-width: none;          /* full-width header */
   padding: clamp(1rem, 2.4vw, 1.8rem) var(--pad) 0;
+}
+.masthead::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--line);
 }
 
 /* name centred, language pinned to the top-right corner */
@@ -96,18 +110,19 @@ body::after {
 }
 
 .ribbon {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: clamp(2.8rem, 7.2vw, 6.4rem);   /* +300% separation */
+  display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between;
+  gap: 0;
+  width: 100%;
   padding: clamp(.7rem, 1.3vw, 1rem) 0;
-  border-bottom: 1px solid var(--line);   /* the menu's bottom line (was a separate .rule--hair) */
   font-family: var(--sans);            /* Sofia Pro */
   font-size: .97rem; letter-spacing: .1em; text-transform: uppercase;  /* +4px */
 }
-.ribbon__link { color: var(--ink-2); position: relative; font-weight: 600; transition: color .2s; }
+.ribbon__link { color: var(--ink-2); position: relative; z-index: 130; font-weight: 600; transition: color .2s; }
 .ribbon__link:hover { color: var(--ink); }
 /* the hover underline drops down onto the menu line below, so the two coincide */
 .ribbon__link::after {
   content: ""; position: absolute; left: 0; right: 100%;
+  z-index: 131;
   bottom: calc(-1 * clamp(.7rem, 1.3vw, 1rem) - 1px); height: 1px;
   background: var(--ink); transition: right .3s var(--ease);
 }
@@ -138,7 +153,7 @@ body::after {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) clamp(300px, 35%, 525px);  /* links · links · image */
   gap: clamp(1.4rem, 3.5vw, 3.5rem);
-  align-items: start;
+  align-items: center;
 }
 
 /* directory split into two left-aligned text columns, followed by the preview. */
@@ -154,19 +169,21 @@ body::after {
   border-top: 1px solid var(--line-2);
   transition: opacity .2s;
 }
+.mega__item:first-child { border-top: 0; }
 /* roll over a link: it stays dark while its siblings dim (the reverse of before) */
 .mega__panel:hover .mega__item { opacity: .4; }
 .mega__panel:hover .mega__item:hover { opacity: 1; }
 .mega__name { font-family: var(--display); font-weight: 500; font-size: clamp(1.15rem, 1.5vw, 1.5rem); line-height: 1.08; }
 .mega__meta { font-family: var(--sans); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); }
 
-/* preview pane — the third column. The image swaps as you hover a restaurant;
-   items with no photo fall back to a neutral placeholder showing their name. */
+/* preview pane — the third column. The image swaps as you hover a restaurant. */
 /* centre column: empty at rest, shows only a hovered restaurant's photo.
    Two stacked layers crossfade as the pointer moves across links. */
 .mega__preview {
   order: 3;
-  position: relative; align-self: stretch;   /* fill the tallest column's height */
+  position: relative;
+  align-self: center;
+  height: clamp(260px, 28vh, 360px);
   overflow: hidden;
 }
 .mega__preview-img {
@@ -182,67 +199,96 @@ body::after {
 /* ===========================================================
    FRONT PAGE — news
    =========================================================== */
-/* news container is full-width with the same side gutter as the masthead, so its
-   edges line up with the header/menu above it (tighter, more consistent design) */
 .paper { max-width: none; margin: 0; padding: clamp(1.6rem, 3vw, 3rem) var(--pad) 0; }
+.home .paper {
+  min-height: 0;
+  padding: 0;
+}
 
 .front { scroll-margin-top: 1rem; }
+.home .front { height: 100%; }
 
-/* lead story — image keeps native ratio (no crop) */
-.lead {
+.news-grid {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: clamp(1.5rem, 3.5vw, 4rem);
-  align-items: start;
-  cursor: pointer;   /* whole story reads as a link */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  height: 100%;
 }
-.lead__media { display: block; overflow: hidden; }
-.lead__media img { width: 100%; height: auto; transition: opacity .4s, transform .6s var(--ease); }
-.lead__media:hover img { opacity: .9; }
-.lead__body { align-self: center; }
-.lead__date { font-family: var(--sans); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); }
-.lead__title {
-  font-family: var(--display); font-weight: 500;
-  font-size: clamp(1.8rem, 3.6vw, 3.2rem); line-height: 1.04; letter-spacing: -.01em;
-  margin: .6rem 0 .8rem;
-}
-.lead__dek { font-size: 1.02rem; color: var(--ink-2); max-width: 46ch; margin-bottom: 1.1rem; }
-.lead__go, .story__go {
-  display: inline-block; font-family: var(--sans); font-size: .72rem;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--ink);
-  border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .25s;
-}
-.lead__go:hover, .story__go:hover { border-color: var(--ink); }
-
-.front__split { margin: clamp(1.8rem, 3.5vw, 3rem) 0; }
-
-/* mosaic — newspaper masonry via CSS multi-column. The browser balances the
-   columns natively, so there are NO vertical gaps between cards, and every
-   image keeps its native AR. Each story is EITHER in the 3-up grid (`normal`)
-   OR breaks out to its own full-width row (`full`, via `column-span: all`).
-   No in-between size on purpose — a 2-col span can't pack without ragged gaps. */
-.mosaic { columns: 3; column-gap: var(--col-gap); }
 .story {
-  break-inside: avoid; -webkit-column-break-inside: avoid;
-  display: inline-block; width: 100%;
-  margin: 0 0 var(--row-gap);
-  cursor: pointer;   /* whole story reads as a link */
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--paper);
 }
-.story[data-size="full"] {
-  display: block;
-  column-span: all; -webkit-column-span: all;
-  margin-top: .4rem;
+.story + .story { border-left: 1px solid var(--line); }
+.story::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--story-image);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity .45s var(--ease), transform .7s var(--ease);
 }
-.story[data-size="full"] .story__media img { max-height: 68vh; object-fit: cover; }
-.story__inner { display: block; }
-.story__media { display: block; overflow: hidden; margin-bottom: .8rem; }
-.story__media img { width: 100%; height: auto; transition: opacity .4s, transform .7s var(--ease); }
-.story:hover .story__media img { transform: scale(1.02); opacity: .94; }
-.story__date { font-family: var(--sans); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); }
+.story::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(244, 243, 241, .78);
+  opacity: 0;
+  transition: opacity .45s var(--ease);
+}
+.story:hover::before,
+.story:focus-within::before {
+  opacity: .24;
+  transform: scale(1);
+}
+.story:hover::after,
+.story:focus-within::after { opacity: 1; }
+.story__inner {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.2rem, 2vw, 2rem);
+  text-align: center;
+}
+.story__text { max-width: min(28rem, 86%); }
 .story__title {
-  font-family: var(--display); font-weight: 500;
-  font-size: clamp(1.25rem, 1.8vw, 1.65rem); line-height: 1.12; letter-spacing: -.005em;
-  margin: .45rem 0 .7rem;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 2.05vw, 2.5rem);
+  line-height: 1.16;
+  margin: 0;
+}
+.story__rule {
+  display: block;
+  width: 3rem;
+  height: 1px;
+  margin: clamp(1rem, 1.6vw, 1.45rem) auto;
+  background: var(--ink);
+}
+.story__expert {
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+}
+@media (max-width: 920px) {
+  .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .story,
+  .story + .story { border-left: 0; }
+  .story:nth-child(even) { border-left: 1px solid var(--line); }
+  .story:nth-child(n + 3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 560px) {
+  .news-grid { grid-template-columns: 1fr; }
+  .story,
+  .story:nth-child(even) { border-left: 0; }
+  .story + .story { border-top: 1px solid var(--line); }
 }
 /* colophon — shared footer (lives outside .paper, full-width with --pad) */
 .colophon {
@@ -258,6 +304,7 @@ body::after {
 .colophon__copy { order: 2; }
 .colophon__credit { order: 3; }
 .colophon__social { order: 1; }
+body.home .colophon { margin-top: 0; }
 
 /* ===========================================================
    ABOUT (page) — ported from proposal 3. Text column on the left,
@@ -349,9 +396,9 @@ html.mnav-open { overflow: hidden; }
    `backwards` so it doesn't override the news hover opacity.
    =========================================================== */
 @keyframes imgFade { from { opacity: 0; } to { opacity: 1; } }
-.story__media img, .about__photo, .lead__media img { animation: imgFade .8s var(--ease) backwards; }
+.about__photo { animation: imgFade .8s var(--ease) backwards; }
 @media (prefers-reduced-motion: reduce) {
-  .story__media img, .about__photo, .lead__media img { animation: none; }
+  .about__photo { animation: none; }
 }
 
 /* ===========================================================
@@ -413,18 +460,10 @@ html { scroll-behavior: smooth; }
 /* ===========================================================
    RESPONSIVE
    =========================================================== */
-@media (max-width: 980px) {
-  .mosaic { columns: 2; }
-}
 @media (max-width: 760px) {
-  .lead { grid-template-columns: 1fr; gap: 1.1rem; }
-  .lead__body { align-self: start; }
   /* the horizontal ribbon + hover mega are replaced by the hamburger drawer */
   .ribbon, .mega { display: none; }
   .mham { display: block; }
-}
-@media (max-width: 560px) {
-  .mosaic { columns: 1; }
 }
 
 /* ===========================================================
