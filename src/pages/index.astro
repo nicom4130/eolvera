@@ -17,7 +17,7 @@ const entries = await reader.collections.news.all();
 // newest first; pinned stories still rise to the front, but the home shows a
 // strict four-story editorial row.
 const news = entries
-  .map((e) => e.entry)
+  .map((e) => ({ slug: e.slug, ...e.entry }))
   .sort((a, b) => {
     const pinned = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
     if (pinned) return pinned;
@@ -64,7 +64,7 @@ const featuredNews = news.slice(0, 4);
       <div class="news-grid" id="mosaic">
         {featuredNews.map((item) => (
           <article class="story" style={`--story-image: url("${imgSrc(item.image)}");`}>
-            <a class="story__inner" href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.title}>
+            <a class="story__inner" href={`/news/${item.slug}/`} aria-label={item.title}>
               <div class="story__text">
                 <h3 class="story__title">{item.title}</h3>
                 <span class="story__rule" aria-hidden="true"></span>
@@ -74,6 +74,7 @@ const featuredNews = news.slice(0, 4);
           </article>
         ))}
       </div>
+      <a class="front__archive" href="/news">Archive</a>
     </section>
 
   </main>

@@ -1,0 +1,91 @@
+---
+import Masthead from '../../components/Masthead.astro';
+import Footer from '../../components/Footer.astro';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const entries = await reader.collections.news.all();
+
+const IMG_BASE = '/images/news/';
+const imgSrc = (file?: string | null) =>
+  !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
+
+const formatDate = (date?: string | null) =>
+  date
+    ? new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(
+        new Date(`${date}T00:00:00`)
+      )
+    : '';
+
+const labelFor = (category?: string | null) =>
+  ({
+    restaurants: 'Restaurants',
+    openings: 'Openings',
+    press: 'Press',
+    collaborations: 'Collaborations',
+    books: 'Books',
+    projects: 'Projects',
+  })[category || ''] || 'News';
+
+const posts = entries
+  .map((e) => ({ slug: e.slug, ...e.entry }))
+  .sort((a, b) => ((a.date ?? '') < (b.date ?? '') ? 1 : -1));
+
+const categories = Array.from(new Set(posts.map((post) => post.category || 'restaurants')));
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archive — Enrique Olvera</title>
+  <meta name="description" content="News archive from the gastronomic universe of Enrique Olvera." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <Masthead />
+
+  <main class="archive-page">
+    <header class="archive-head">
+      <h1 class="archive-head__title">Archive</h1>
+      <nav class="archive-filter" aria-label="News categories" data-news-filters>
+        <button class="archive-filter__button is-active" type="button" data-filter="all">All</button>
+        {categories.map((category) => (
+          <button class="archive-filter__button" type="button" data-filter={category}>{labelFor(category)}</button>
+        ))}
+      </nav>
+    </header>
+
+    <section class="archive-grid" aria-label="News archive" data-news-grid>
+      {posts.map((post) => (
+        <article class:list={['archive-card', post.size === 'full' && 'archive-card--full']} data-category={post.category || 'restaurants'}>
+          <a class="archive-card__link" href={`/news/${post.slug}/`}>
+            <figure class="archive-card__figure">
+              <img src={imgSrc(post.image)} alt="" loading="lazy" decoding="async" />
+            </figure>
+            <div class="archive-card__body">
+              <span class="archive-card__meta">{labelFor(post.category)} {formatDate(post.date) && ` / ${formatDate(post.date)}`}</span>
+              <h2 class="archive-card__title">{post.title}</h2>
+              {post.excerpt && <p class="archive-card__excerpt">{post.excerpt}</p>}
+            </div>
+          </a>
+        </article>
+      ))}
+    </section>
+  </main>
+
+  <Footer />
+
+  <script src="/script.js" is:inline></script>
+</body>
+</html>

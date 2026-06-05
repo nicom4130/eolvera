@@ -283,6 +283,27 @@
   }
 
   /* ---------------------------------------------------------
+     News archive — category filters.
+     --------------------------------------------------------- */
+  var filterBar = doc.querySelector("[data-news-filters]");
+  var archiveGrid = doc.querySelector("[data-news-grid]");
+  if (filterBar && archiveGrid) {
+    var cards = Array.prototype.slice.call(archiveGrid.querySelectorAll("[data-category]"));
+    filterBar.addEventListener("click", function (e) {
+      var btn = e.target.closest && e.target.closest("[data-filter]");
+      if (!btn) return;
+      var filter = btn.getAttribute("data-filter");
+      filterBar.querySelectorAll("[data-filter]").forEach(function (b) {
+        b.classList.toggle("is-active", b === btn);
+      });
+      cards.forEach(function (card) {
+        var match = filter === "all" || card.getAttribute("data-category") === filter;
+        card.classList.toggle("is-hidden", !match);
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------
      Boot
      --------------------------------------------------------- */
   applyLang("en");

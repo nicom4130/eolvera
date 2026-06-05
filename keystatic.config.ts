@@ -49,7 +49,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/news/*',
       entryLayout: 'form',
-      columns: ['title', 'date'],
+      columns: ['title', 'date', 'category'],
       schema: {
         image: fields.image({
           label: 'Imagen',
@@ -67,6 +67,19 @@ export default config({
         date: fields.date({
           label: 'Fecha',
           description: 'Ordena las notas: la más reciente va primero (salvo que fijes otra como principal).',
+        }),
+        category: fields.select({
+          label: 'Categoría',
+          description: 'Sirve para filtrar el archivo de noticias.',
+          options: [
+            { label: 'Restaurants', value: 'restaurants' },
+            { label: 'Openings', value: 'openings' },
+            { label: 'Press', value: 'press' },
+            { label: 'Collaborations', value: 'collaborations' },
+            { label: 'Books', value: 'books' },
+            { label: 'Projects', value: 'projects' },
+          ],
+          defaultValue: 'restaurants',
         }),
         pinned: fields.checkbox({
           label: 'Fijar como nota principal',
@@ -89,10 +102,14 @@ export default config({
           multiline: true,
           validation: { length: { max: 1200 } },
         }),
+        body: fields.text({
+          label: 'Post',
+          description: 'Contenido de la página interna. Puedes separar párrafos con una línea en blanco.',
+          multiline: true,
+        }),
         link: fields.url({
           label: 'Enlace externo',
-          description: 'El botón "View +" abre este enlace en otra pestaña.',
-          validation: { isRequired: true },
+          description: 'Opcional. Si existe, aparece como enlace externo dentro del post.',
         }),
       },
     }),

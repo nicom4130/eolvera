@@ -1,0 +1,94 @@
+---
+import Masthead from '../../components/Masthead.astro';
+import Footer from '../../components/Footer.astro';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
+
+export async function getStaticPaths() {
+  const reader = createReader(process.cwd(), keystaticConfig);
+  const entries = await reader.collections.news.all();
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { post: entry.entry, slug: entry.slug },
+  }));
+}
+
+const { post } = Astro.props;
+
+const IMG_BASE = '/images/news/';
+const imgSrc = (file?: string | null) =>
+  !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
+
+const formatDate = (date?: string | null) =>
+  date
+    ? new Intl.DateTimeFormat('en', { month: 'long', day: 'numeric', year: 'numeric' }).format(
+        new Date(`${date}T00:00:00`)
+      )
+    : '';
+
+const labelFor = (category?: string | null) =>
+  ({
+    restaurants: 'Restaurants',
+    openings: 'Openings',
+    press: 'Press',
+    collaborations: 'Collaborations',
+    books: 'Books',
+    projects: 'Projects',
+  })[category || ''] || 'News';
+
+const body = (post.body || post.excerpt || '')
+  .split(/\n{2,}/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{post.title} — Enrique Olvera</title>
+  <meta name="description" content={post.excerpt || post.title} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <Masthead />
+
+  <main class="post-page">
+    <article class="post">
+      <header class="post__head">
+        <a class="post__back" href="/news">Archive</a>
+        <p class="post__meta">{labelFor(post.category)} {formatDate(post.date) && ` / ${formatDate(post.date)}`}</p>
+        <h1 class="post__title">{post.title}</h1>
+        {post.excerpt && <p class="post__dek">{post.excerpt}</p>}
+      </header>
+
+      <figure class="post__figure">
+        <img src={imgSrc(post.image)} alt="" decoding="async" />
+      </figure>
+
+      <div class="post__body">
+        {body.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      {post.link && (
+        <p class="post__external">
+          <a href={post.link} target="_blank" rel="noopener noreferrer">External Link</a>
+        </p>
+      )}
+    </article>
+  </main>
+
+  <Footer />
+
+  <script src="/script.js" is:inline></script>
+</body>
+</html>
