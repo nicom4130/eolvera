@@ -7,7 +7,11 @@ export const prerender = false;
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { 'content-type': 'application/json' },
+    headers: {
+      'content-type': 'application/json',
+      'cache-control': 'no-store',
+      'x-content-type-options': 'nosniff',
+    },
   });
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
@@ -18,8 +22,33 @@ const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 //    _t on page load via JS; we reject anything faster)
 //  · server-side validation
 const MIN_FILL_MS = 3000;
+const MAX_BODY_BYTES = 20_000;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_MAX = 5;
+const hits = new Map<string, number[]>();
+
+const clientKey = (request: Request) => {
+  const forwarded = request.headers.get('x-forwarded-for') || '';
+  return forwarded.split(',')[0].trim() || request.headers.get('x-real-ip') || 'unknown';
+};
+
+const isRateLimited = (key: string) => {
+  const now = Date.now();
+  const recent = (hits.get(key) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (recent.length >= RATE_MAX) {
+    hits.set(key, recent);
+    return true;
+  }
+  recent.push(now);
+  hits.set(key, recent);
+  return false;
+};
 
 export const POST: APIRoute = async ({ request }) => {
+  const contentLength = Number(request.headers.get('content-length') || 0);
+  if (contentLength > MAX_BODY_BYTES) return json({ ok: false, error: 'too_large' }, 413);
+  if (isRateLimited(clientKey(request))) return json({ ok: false, error: 'rate_limited' }, 429);
+
   let data: Record<string, unknown> = {};
   try {
     const ct = request.headers.get('content-type') || '';
@@ -35,7 +64,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const name = String(data.name ?? '').trim();
   const email = String(data.email ?? '').trim();
-  const message = String(data.message ?? '').trim();
+  const message = String(data.message ?? '').trim().slice(0, 5000);
   const company = String(data.company ?? '').trim(); // honeypot
   const t = Number(data._t ?? 0);
   const source = String(data.source ?? 'contact').slice(0, 40);
@@ -45,7 +74,7 @@ export const POST: APIRoute = async ({ request }) => {
   // submitted impossibly fast → bot
   if (!t || Date.now() - t < MIN_FILL_MS) return json({ ok: false, error: 'too_fast' }, 400);
   // validation
-  if (!name || !isEmail(email) || message.length < 5) {
+  if (!name || name.length > 120 || !isEmail(email) || email.length > 254 || message.length < 5) {
     return json({ ok: false, error: 'invalid' }, 400);
   }
 

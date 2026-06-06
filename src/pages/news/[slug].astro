@@ -7,13 +7,17 @@ import keystaticConfig from '../../../keystatic.config';
 export async function getStaticPaths() {
   const reader = createReader(process.cwd(), keystaticConfig);
   const entries = await reader.collections.news.all();
+  const categoryEntries = await reader.collections.categories.all();
+  const categoryLabels = Object.fromEntries(
+    categoryEntries.map((category) => [category.slug, category.entry.name])
+  );
   return entries.map((entry) => ({
     params: { slug: entry.slug },
-    props: { post: entry.entry, slug: entry.slug },
+    props: { post: entry.entry, categoryLabels },
   }));
 }
 
-const { post } = Astro.props;
+const { post, categoryLabels } = Astro.props;
 
 const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
@@ -26,15 +30,10 @@ const formatDate = (date?: string | null) =>
       )
     : '';
 
-const labelFor = (category?: string | null) =>
-  ({
-    restaurants: 'Restaurants',
-    openings: 'Openings',
-    press: 'Press',
-    collaborations: 'Collaborations',
-    books: 'Books',
-    projects: 'Projects',
-  })[category || ''] || 'News';
+const labelFor = (category?: string | null) => {
+  if (!category) return 'News';
+  return categoryLabels[category] || category.replace(/-/g, ' ');
+};
 
 const body = (post.body || post.excerpt || '')
   .split(/\n{2,}/)

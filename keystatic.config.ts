@@ -5,8 +5,9 @@ import { createElement } from 'react';
 //  KEYSTATIC CONFIG — Enrique Olvera · News admin
 // ============================================================
 //
-//  GitHub mode: the admin commits content straight to this repo via a GitHub
-//  App, so editors work on the LIVE site (newseolvera signs in with GitHub).
+//  Local dev uses local file storage so localhost works without GitHub auth.
+//  Production uses GitHub mode: the admin commits content straight to this repo
+//  via a GitHub App, so editors work on the LIVE site (newseolvera signs in).
 //  Needs 3 env vars (set in Vercel, and in .env.local for local dev):
 //    KEYSTATIC_GITHUB_CLIENT_ID / KEYSTATIC_GITHUB_CLIENT_SECRET / KEYSTATIC_SECRET
 //  Create them once via the setup wizard at <site>/keystatic (it pre-fills the
@@ -15,10 +16,12 @@ import { createElement } from 'react';
 //  static site renders even before the wizard is done.
 //
 export default config({
-  storage: {
-    kind: 'github',
-    repo: 'newseolvera/enriqueolvera-site',
-  },
+  storage: import.meta.env.DEV
+    ? { kind: 'local' }
+    : {
+        kind: 'github',
+        repo: 'newseolvera/enriqueolvera-site',
+      },
 
   ui: {
     // Keystatic's admin uses its own design system; what we CAN brand is the
@@ -39,11 +42,34 @@ export default config({
             },
           },
           'EO'
-        ),
+      ),
+    },
+    navigation: {
+      Content: ['news', 'categories'],
     },
   },
 
   collections: {
+    categories: collection({
+      label: 'Categories',
+      slugField: 'name',
+      path: 'src/content/categories/*',
+      entryLayout: 'form',
+      columns: ['name'],
+      schema: {
+        name: fields.slug({
+          name: {
+            label: 'Nombre',
+            validation: { isRequired: true },
+          },
+          slug: {
+            label: 'Slug',
+            description: 'Se usa internamente para conectar News con esta categoría.',
+          },
+        }),
+      },
+    }),
+
     news: collection({
       label: 'News',
       slugField: 'title',
@@ -68,18 +94,11 @@ export default config({
           label: 'Fecha',
           description: 'Ordena las notas: la más reciente va primero (salvo que fijes otra como principal).',
         }),
-        category: fields.select({
+        category: fields.relationship({
           label: 'Categoría',
           description: 'Sirve para filtrar el archivo de noticias.',
-          options: [
-            { label: 'Restaurants', value: 'restaurants' },
-            { label: 'Openings', value: 'openings' },
-            { label: 'Press', value: 'press' },
-            { label: 'Collaborations', value: 'collaborations' },
-            { label: 'Books', value: 'books' },
-            { label: 'Projects', value: 'projects' },
-          ],
-          defaultValue: 'restaurants',
+          collection: 'categories',
+          validation: { isRequired: true },
         }),
         pinned: fields.checkbox({
           label: 'Fijar como nota principal',

@@ -6,6 +6,7 @@ import keystaticConfig from '../../../keystatic.config';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 const entries = await reader.collections.news.all();
+const categoryEntries = await reader.collections.categories.all();
 
 const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
@@ -18,21 +19,17 @@ const formatDate = (date?: string | null) =>
       )
     : '';
 
-const labelFor = (category?: string | null) =>
-  ({
-    restaurants: 'Restaurants',
-    openings: 'Openings',
-    press: 'Press',
-    collaborations: 'Collaborations',
-    books: 'Books',
-    projects: 'Projects',
-  })[category || ''] || 'News';
+const categoryLabels = new Map(categoryEntries.map((category) => [category.slug, category.entry.name]));
+const labelFor = (category?: string | null) => {
+  if (!category) return 'News';
+  return categoryLabels.get(category) || category.replace(/-/g, ' ');
+};
 
 const posts = entries
   .map((e) => ({ slug: e.slug, ...e.entry }))
   .sort((a, b) => ((a.date ?? '') < (b.date ?? '') ? 1 : -1));
 
-const categories = Array.from(new Set(posts.map((post) => post.category || 'restaurants')));
+const categories = categoryEntries.map((category) => category.slug);
 ---
 
 <!DOCTYPE html>
@@ -68,7 +65,7 @@ const categories = Array.from(new Set(posts.map((post) => post.category || 'rest
 
     <section class="archive-grid" aria-label="News archive" data-news-grid>
       {posts.map((post) => (
-        <article class="archive-card" data-category={post.category || 'restaurants'}>
+        <article class="archive-card" data-category={post.category || ''}>
           <a class="archive-card__link" href={`/news/${post.slug}/`}>
             <figure class="archive-card__figure">
               <img src={imgSrc(post.image)} alt="" loading="lazy" decoding="async" />
