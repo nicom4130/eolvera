@@ -103,7 +103,7 @@ body::after {
   text-align: center;
   font-family: var(--display);
   font-weight: 500;
-  font-size: clamp(2.6rem, 9vw, 7.5rem);
+  font-size: clamp(2.028rem, 7.02vw, 5.85rem);
   line-height: .94;
   letter-spacing: -.01em;
   padding: clamp(1rem, 2.6vw, 2rem) 0 clamp(.9rem, 1.8vw, 1.4rem);
