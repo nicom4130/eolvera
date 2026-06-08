@@ -12,17 +12,33 @@ const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
   !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
 
-const formatDate = (date?: string | null) =>
-  date
+const langPair = (en?: string | null, es?: string | null) => ({
+  en: en || es || '',
+  es: es || en || '',
+});
+
+const formatDate = (date?: string | null) => ({
+  en: date
     ? new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(
         new Date(`${date}T00:00:00`)
       )
-    : '';
+    : '',
+  es: date
+    ? new Intl.DateTimeFormat('es', { month: 'long', year: 'numeric' }).format(
+        new Date(`${date}T00:00:00`)
+      )
+    : '',
+});
 
-const categoryLabels = new Map(categoryEntries.map((category) => [category.slug, category.entry.name]));
+const categoryLabels = new Map(
+  categoryEntries.map((category) => [
+    category.slug,
+    langPair(category.entry.name, category.entry.nameEs),
+  ])
+);
 const labelFor = (category?: string | null) => {
-  if (!category) return 'News';
-  return categoryLabels.get(category) || category.replace(/-/g, ' ');
+  if (!category) return { en: 'News', es: 'Noticias' };
+  return categoryLabels.get(category) || langPair(category.replace(/-/g, ' '));
 };
 
 const posts = entries
@@ -54,30 +70,53 @@ const categories = categoryEntries.map((category) => category.slug);
 
   <main class="archive-page">
     <header class="archive-head">
-      <h1 class="archive-head__title">Archive</h1>
+      <h1 class="archive-head__title" data-i18n="archive">Archive</h1>
       <nav class="archive-filter" aria-label="News categories" data-news-filters>
-        <button class="archive-filter__button is-active" type="button" data-filter="all">All</button>
-        {categories.map((category) => (
-          <button class="archive-filter__button" type="button" data-filter={category}>{labelFor(category)}</button>
-        ))}
+        <button class="archive-filter__button is-active" type="button" data-filter="all" data-i18n="all">All</button>
+        {categories.map((category) => {
+          const label = labelFor(category);
+
+          return (
+            <button class="archive-filter__button" type="button" data-filter={category}>
+              <span data-lang-content="en">{label.en}</span>
+              <span data-lang-content="es" hidden>{label.es}</span>
+            </button>
+          );
+        })}
       </nav>
     </header>
 
     <section class="archive-grid" aria-label="News archive" data-news-grid>
-      {posts.map((post) => (
-        <article class="archive-card" data-category={post.category || ''}>
-          <a class="archive-card__link" href={`/news/${post.slug}/`}>
-            <figure class="archive-card__figure">
-              <img src={imgSrc(post.image)} alt="" loading="lazy" decoding="async" />
-            </figure>
-            <div class="archive-card__body">
-              <span class="archive-card__meta">{labelFor(post.category)} {formatDate(post.date) && ` / ${formatDate(post.date)}`}</span>
-              <h2 class="archive-card__title">{post.title}</h2>
-              {post.excerpt && <p class="archive-card__excerpt">{post.excerpt}</p>}
-            </div>
-          </a>
-        </article>
-      ))}
+      {posts.map((post) => {
+        const title = langPair(post.title, post.titleEs);
+        const excerpt = langPair(post.excerpt, post.excerptEs);
+        const category = labelFor(post.category);
+        const date = formatDate(post.date);
+
+        return (
+          <article class="archive-card" data-category={post.category || ''}>
+            <a class="archive-card__link" href={`/news/${post.slug}/`}>
+              <figure class="archive-card__figure">
+                <img src={imgSrc(post.image)} alt="" loading="lazy" decoding="async" />
+              </figure>
+              <div class="archive-card__body">
+                <span class="archive-card__meta" data-lang-content="en">{category.en}{date.en && ` / ${date.en}`}</span>
+                <span class="archive-card__meta" data-lang-content="es" hidden>{category.es}{date.es && ` / ${date.es}`}</span>
+                <h2 class="archive-card__title">
+                  <span data-lang-content="en">{title.en}</span>
+                  <span data-lang-content="es" hidden>{title.es}</span>
+                </h2>
+                {(excerpt.en || excerpt.es) && (
+                  <>
+                    <p class="archive-card__excerpt" data-lang-content="en">{excerpt.en}</p>
+                    <p class="archive-card__excerpt" data-lang-content="es" hidden>{excerpt.es}</p>
+                  </>
+                )}
+              </div>
+            </a>
+          </article>
+        );
+      })}
     </section>
   </main>
 

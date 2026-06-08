@@ -16,6 +16,7 @@
       menu: "Menu", close: "Close", sections: "Sections",
       news: "News", about: "About", consulting: "Consulting",
       consultingContact: "Consulting & Contact",
+      archive: "Archive", all: "All", externalLink: "External Link",
       kicker: "The gastronomic universe of Enrique Olvera",
       view: "View +", shop: "Shop",
       autumn26: "Opening Autumn 2026", spring26: "Opening Spring 2026",
@@ -40,6 +41,7 @@
       menu: "Menú", close: "Cerrar", sections: "Secciones",
       news: "Noticias", about: "Perfil", consulting: "Consultoría",
       consultingContact: "Consultoría y Contacto",
+      archive: "Archivo", all: "Todas", externalLink: "Enlace externo",
       kicker: "El universo gastronómico de Enrique Olvera",
       view: "Ver +", shop: "Tienda",
       autumn26: "Apertura Otoño 2026", spring26: "Apertura Primavera 2026",
@@ -64,14 +66,28 @@
 
   var lang = "en";
 
+  function saveLang(next) {
+    try { window.localStorage.setItem("eo-lang", next); } catch (e) {}
+  }
+
+  function getSavedLang() {
+    try { return window.localStorage.getItem("eo-lang") || "en"; } catch (e) { return "en"; }
+  }
+
   function applyLang(next) {
+    if (!I18N[next]) next = "en";
     lang = next;
     var dict = I18N[lang];
     doc.documentElement.lang = lang;
+    saveLang(lang);
 
     doc.querySelectorAll("[data-i18n]").forEach(function (el) {
       var v = dict[el.getAttribute("data-i18n")];
       if (v != null) el.textContent = v;
+    });
+
+    doc.querySelectorAll("[data-lang-content]").forEach(function (el) {
+      el.hidden = el.getAttribute("data-lang-content") !== lang;
     });
 
     doc.querySelectorAll(".lang__opt").forEach(function (b) {
@@ -330,5 +346,5 @@
   /* ---------------------------------------------------------
      Boot
      --------------------------------------------------------- */
-  applyLang("en");
+  applyLang(getSavedLang());
 })();

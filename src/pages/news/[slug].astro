@@ -9,7 +9,13 @@ export async function getStaticPaths() {
   const entries = await reader.collections.news.all();
   const categoryEntries = await reader.collections.categories.all();
   const categoryLabels = Object.fromEntries(
-    categoryEntries.map((category) => [category.slug, category.entry.name])
+    categoryEntries.map((category) => [
+      category.slug,
+      {
+        en: category.entry.name,
+        es: category.entry.nameEs || category.entry.name,
+      },
+    ])
   );
   return entries.map((entry) => ({
     params: { slug: entry.slug },
@@ -23,22 +29,44 @@ const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
   !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
 
-const formatDate = (date?: string | null) =>
-  date
+const langPair = (en?: string | null, es?: string | null) => ({
+  en: en || es || '',
+  es: es || en || '',
+});
+
+const formatDate = (date?: string | null) => ({
+  en: date
     ? new Intl.DateTimeFormat('en', { month: 'long', day: 'numeric', year: 'numeric' }).format(
         new Date(`${date}T00:00:00`)
       )
-    : '';
+    : '',
+  es: date
+    ? new Intl.DateTimeFormat('es', { month: 'long', day: 'numeric', year: 'numeric' }).format(
+        new Date(`${date}T00:00:00`)
+      )
+    : '',
+});
 
 const labelFor = (category?: string | null) => {
-  if (!category) return 'News';
-  return categoryLabels[category] || category.replace(/-/g, ' ');
+  if (!category) return { en: 'News', es: 'Noticias' };
+  const label = categoryLabels[category];
+  return typeof label === 'object' && label !== null
+    ? langPair(label.en, label.es)
+    : langPair(label || category.replace(/-/g, ' '));
 };
 
-const body = (post.body || post.excerpt || '')
+const paragraphs = (value?: string | null) =>
+  (value || '')
   .split(/\n{2,}/)
   .map((paragraph) => paragraph.trim())
   .filter(Boolean);
+
+const title = langPair(post.title, post.titleEs);
+const excerpt = langPair(post.excerpt, post.excerptEs);
+const category = labelFor(post.category);
+const date = formatDate(post.date);
+const bodyEn = paragraphs(post.body || post.excerpt);
+const bodyEs = paragraphs(post.bodyEs || post.excerptEs || post.body || post.excerpt);
 ---
 
 <!DOCTYPE html>
@@ -46,8 +74,8 @@ const body = (post.body || post.excerpt || '')
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{post.title} — Enrique Olvera</title>
-  <meta name="description" content={post.excerpt || post.title} />
+  <title>{title.en} — Enrique Olvera</title>
+  <meta name="description" content={excerpt.en || title.en} />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="/favicon.ico" />
 
@@ -64,23 +92,36 @@ const body = (post.body || post.excerpt || '')
   <main class="post-page">
     <article class="post">
       <header class="post__head">
-        <a class="post__back" href="/news">Archive</a>
-        <p class="post__meta">{labelFor(post.category)} {formatDate(post.date) && ` / ${formatDate(post.date)}`}</p>
-        <h1 class="post__title">{post.title}</h1>
-        {post.excerpt && <p class="post__dek">{post.excerpt}</p>}
+        <a class="post__back" href="/news" data-i18n="archive">Archive</a>
+        <p class="post__meta" data-lang-content="en">{category.en}{date.en && ` / ${date.en}`}</p>
+        <p class="post__meta" data-lang-content="es" hidden>{category.es}{date.es && ` / ${date.es}`}</p>
+        <h1 class="post__title">
+          <span data-lang-content="en">{title.en}</span>
+          <span data-lang-content="es" hidden>{title.es}</span>
+        </h1>
+        {(excerpt.en || excerpt.es) && (
+          <>
+            <p class="post__dek" data-lang-content="en">{excerpt.en}</p>
+            <p class="post__dek" data-lang-content="es" hidden>{excerpt.es}</p>
+          </>
+        )}
       </header>
 
       <figure class="post__figure">
         <img src={imgSrc(post.image)} alt="" decoding="async" />
       </figure>
 
-      <div class="post__body">
-        {body.map((paragraph) => <p>{paragraph}</p>)}
+      <div class="post__body" data-lang-content="en">
+        {bodyEn.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      <div class="post__body" data-lang-content="es" hidden>
+        {bodyEs.map((paragraph) => <p>{paragraph}</p>)}
       </div>
 
       {post.link && (
         <p class="post__external">
-          <a href={post.link} target="_blank" rel="noopener noreferrer">External Link</a>
+          <a href={post.link} target="_blank" rel="noopener noreferrer" data-i18n="externalLink">External Link</a>
         </p>
       )}
     </article>

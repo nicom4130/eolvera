@@ -571,7 +571,6 @@ body::after {
 .post__figure img {
   width: 100%;
   height: auto;
-  filter: grayscale(1);
 }
 .post__body {
   max-width: 680px;

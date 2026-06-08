@@ -59,13 +59,17 @@ export default config({
       schema: {
         name: fields.slug({
           name: {
-            label: 'Nombre',
+            label: 'Name EN',
             validation: { isRequired: true },
           },
           slug: {
             label: 'Slug',
-            description: 'Se usa internamente para conectar News con esta categoría.',
+            description: 'Used internally to connect News entries with this category.',
           },
+        }),
+        nameEs: fields.text({
+          label: 'Name ES',
+          description: 'Spanish category label shown when the site language is ES.',
         }),
       },
     }),
@@ -78,48 +82,64 @@ export default config({
       columns: ['title', 'date', 'category'],
       schema: {
         image: fields.image({
-          label: 'Imagen',
-          description: 'Imagen de la noticia (se respeta su proporción original).',
+          label: 'Image',
+          description: 'News image. The original aspect ratio is preserved.',
           directory: 'public/images/news',
           publicPath: '/images/news/',
           validation: { isRequired: true },
         }),
         title: fields.slug({
           name: {
-            label: 'Título',
+            label: 'Title EN',
             validation: { isRequired: true },
           },
         }),
+        titleEs: fields.text({
+          label: 'Title ES',
+          description: 'Spanish title shown when the site language is ES.',
+          validation: { isRequired: true },
+        }),
         date: fields.date({
-          label: 'Fecha',
-          description: 'Ordena las notas: la más reciente va primero (salvo que fijes otra como principal).',
+          label: 'Date',
+          description: 'Controls ordering. The newest entry appears first unless another one is pinned.',
         }),
         category: fields.relationship({
-          label: 'Categoría',
-          description: 'Sirve para filtrar el archivo de noticias.',
+          label: 'Category',
+          description: 'Used to filter the news archive.',
           collection: 'categories',
           validation: { isRequired: true },
         }),
         pinned: fields.checkbox({
-          label: 'Fijar como nota principal',
+          label: 'Pin as lead story',
           description:
-            'La coloca arriba, en grande, como portada (reemplaza a la más reciente). Si seleccionas varias, se usa la más reciente.',
+            'Shows this entry as the lead story. If several entries are pinned, the newest pinned entry is used.',
           defaultValue: false,
         }),
         excerpt: fields.text({
-          label: 'Resumen (máx. ~200 palabras)',
-          description: 'Texto breve que acompaña a la nota destacada.',
+          label: 'Excerpt EN',
+          description: 'English short text used on cards and lead story previews.',
+          multiline: true,
+          validation: { length: { max: 1200 } },
+        }),
+        excerptEs: fields.text({
+          label: 'Excerpt ES',
+          description: 'Spanish short text used on cards and lead story previews.',
           multiline: true,
           validation: { length: { max: 1200 } },
         }),
         body: fields.text({
-          label: 'Post',
-          description: 'Contenido de la página interna. Puedes separar párrafos con una línea en blanco.',
+          label: 'Post EN',
+          description: 'English content for the internal news page. Separate paragraphs with a blank line.',
+          multiline: true,
+        }),
+        bodyEs: fields.text({
+          label: 'Post ES',
+          description: 'Spanish content for the internal news page. Separate paragraphs with a blank line.',
           multiline: true,
         }),
         link: fields.url({
-          label: 'Enlace externo',
-          description: 'Opcional. Si existe, aparece como enlace externo dentro del post.',
+          label: 'External link',
+          description: 'Optional. If present, it appears as an external link inside the post.',
         }),
       },
     }),

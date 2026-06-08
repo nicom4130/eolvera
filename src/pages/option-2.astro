@@ -20,8 +20,15 @@ const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
   !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
 
+const langPair = (en?: string | null, es?: string | null) => ({
+  en: en || es || '',
+  es: es || en || '',
+});
+
 const lead = news[0];
 const secondaryNews = news.slice(1, 4);
+const leadTitle = lead ? langPair(lead.title, lead.titleEs) : null;
+const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 ---
 
 <!DOCTYPE html>
@@ -48,12 +55,20 @@ const secondaryNews = news.slice(1, 4);
     <section class="option-front" aria-label="News option 2">
       {lead && (
         <article class="option-lead">
-          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={lead.title}>
+          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={leadTitle?.en}>
             <img src={imgSrc(lead.image)} alt="" loading="eager" decoding="async" />
           </a>
           <div class="option-lead__body">
-            <h1 class="option-lead__title">{lead.title}</h1>
-            {lead.excerpt && <p class="option-lead__dek">{lead.excerpt}</p>}
+            <h1 class="option-lead__title">
+              <span data-lang-content="en">{leadTitle?.en}</span>
+              <span data-lang-content="es" hidden>{leadTitle?.es}</span>
+            </h1>
+            {(leadExcerpt?.en || leadExcerpt?.es) && (
+              <>
+                <p class="option-lead__dek" data-lang-content="en">{leadExcerpt.en}</p>
+                <p class="option-lead__dek" data-lang-content="es" hidden>{leadExcerpt.es}</p>
+              </>
+            )}
           </div>
         </article>
       )}
@@ -61,20 +76,33 @@ const secondaryNews = news.slice(1, 4);
       <div class="rule rule--hair option-front__split"></div>
 
       <div class="option-grid">
-        {secondaryNews.map((item) => (
-          <article class="option-card">
-            <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={item.title}>
-              <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
-            </a>
-            <h2 class="option-card__title">
-              <a href={`/news/${item.slug}/`}>{item.title}</a>
-            </h2>
-            {item.excerpt && <p class="option-card__excerpt">{item.excerpt}</p>}
-          </article>
-        ))}
+        {secondaryNews.map((item) => {
+          const title = langPair(item.title, item.titleEs);
+          const excerpt = langPair(item.excerpt, item.excerptEs);
+
+          return (
+            <article class="option-card">
+              <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={title.en}>
+                <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
+              </a>
+              <h2 class="option-card__title">
+                <a href={`/news/${item.slug}/`}>
+                  <span data-lang-content="en">{title.en}</span>
+                  <span data-lang-content="es" hidden>{title.es}</span>
+                </a>
+              </h2>
+              {(excerpt.en || excerpt.es) && (
+                <>
+                  <p class="option-card__excerpt" data-lang-content="en">{excerpt.en}</p>
+                  <p class="option-card__excerpt" data-lang-content="es" hidden>{excerpt.es}</p>
+                </>
+              )}
+            </article>
+          );
+        })}
       </div>
 
-      <a class="front__archive" href="/news">Archive</a>
+      <a class="front__archive" href="/news" data-i18n="archive">Archive</a>
     </section>
   </main>
 
