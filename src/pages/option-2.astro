@@ -1,0 +1,85 @@
+---
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+
+const entries = await reader.collections.news.all();
+
+const news = entries
+  .map((e) => ({ slug: e.slug, ...e.entry }))
+  .sort((a, b) => {
+    const pinned = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
+    if (pinned) return pinned;
+    return (a.date ?? '') < (b.date ?? '') ? 1 : -1;
+  });
+
+const IMG_BASE = '/images/news/';
+const imgSrc = (file?: string | null) =>
+  !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
+
+const lead = news[0];
+const secondaryNews = news.slice(1, 4);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option 2 — Enrique Olvera</title>
+  <meta name="description" content="Alternative news presentation for Enrique Olvera." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="option-home">
+
+  <Masthead />
+
+  <main class="paper option-paper" id="top">
+    <a id="news"></a>
+    <section class="option-front" aria-label="News option 2">
+      {lead && (
+        <article class="option-lead">
+          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={lead.title}>
+            <img src={imgSrc(lead.image)} alt="" loading="eager" decoding="async" />
+          </a>
+          <div class="option-lead__body">
+            <h1 class="option-lead__title">{lead.title}</h1>
+            {lead.excerpt && <p class="option-lead__dek">{lead.excerpt}</p>}
+          </div>
+        </article>
+      )}
+
+      <div class="rule rule--hair option-front__split"></div>
+
+      <div class="option-grid">
+        {secondaryNews.map((item) => (
+          <article class="option-card">
+            <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={item.title}>
+              <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
+            </a>
+            <h2 class="option-card__title">
+              <a href={`/news/${item.slug}/`}>{item.title}</a>
+            </h2>
+            {item.excerpt && <p class="option-card__excerpt">{item.excerpt}</p>}
+          </article>
+        ))}
+      </div>
+
+      <a class="front__archive" href="/news">Archive</a>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script src="/script.js" is:inline></script>
+</body>
+</html>

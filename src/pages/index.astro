@@ -63,7 +63,8 @@ const featuredNews = news.slice(0, 4);
     <section class="front" aria-label="News">
       <div class="news-grid" id="mosaic">
         {featuredNews.map((item) => (
-          <article class="story" style={`--story-image: url("${imgSrc(item.image)}");`}>
+          <article class="story">
+            <img class="story__image" src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
             <a class="story__inner" href={`/news/${item.slug}/`} aria-label={item.title}>
               <div class="story__text">
                 <h3 class="story__title">{item.title}</h3>
