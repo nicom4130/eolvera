@@ -15,8 +15,17 @@
     en: {
       menu: "Menu", close: "Close", sections: "Sections",
       news: "News", about: "About", consulting: "Consulting",
-      consultingContact: "Consulting & Contact",
+      consultingContact: "Consulting & Contact", option2: "Option 2",
+      otherProjects: "Other Projects", bio: "Bio", contact: "Contact",
       archive: "Archive", all: "All", externalLink: "External Link",
+      name: "Name", email: "Email", message: "Message", send: "Send",
+      getInTouch: "Get in touch", books: "Books", emailLink: "Email",
+      mexicoCity: "Mexico City", newYork: "New York", losAngeles: "Los Angeles",
+      sending: "Sending...",
+      formOk: "Thank you. We'll be in touch.",
+      formNotConfigured: "Form isn't live yet. Please email us directly.",
+      formError: "Something went wrong. Please email us directly.",
+      formNetwork: "Network error. Please email us directly.",
       kicker: "The gastronomic universe of Enrique Olvera",
       view: "View +", shop: "Shop",
       autumn26: "Opening Autumn 2026", spring26: "Opening Spring 2026",
@@ -40,8 +49,17 @@
     es: {
       menu: "Menú", close: "Cerrar", sections: "Secciones",
       news: "Noticias", about: "Perfil", consulting: "Consultoría",
-      consultingContact: "Consultoría y Contacto",
+      consultingContact: "Consultoría y Contacto", option2: "Opción 2",
+      otherProjects: "Otros proyectos", bio: "Bio", contact: "Contacto",
       archive: "Archivo", all: "Todas", externalLink: "Enlace externo",
+      name: "Nombre", email: "Correo electrónico", message: "Mensaje", send: "Enviar",
+      getInTouch: "Contactar", books: "Libros", emailLink: "Correo",
+      mexicoCity: "Ciudad de México", newYork: "Nueva York", losAngeles: "Los Ángeles",
+      sending: "Enviando...",
+      formOk: "Gracias. Te responderemos pronto.",
+      formNotConfigured: "El formulario todavía no está activo. Escríbenos por email.",
+      formError: "Algo salió mal. Escríbenos por email.",
+      formNetwork: "Error de red. Escríbenos por email.",
       kicker: "El universo gastronómico de Enrique Olvera",
       view: "Ver +", shop: "Tienda",
       autumn26: "Apertura Otoño 2026", spring26: "Apertura Primavera 2026",
@@ -228,7 +246,7 @@
 
         if (val("company")) return;            // honeypot tripped → ignore
         if (btn) btn.disabled = true;
-        setMsg("Sending…", "");
+        setMsg(I18N[lang].sending, "");
 
         fetch("/api/contact", {
           method: "POST",
@@ -243,14 +261,14 @@
             if (res.ok) {
               form.reset();
               if (tsEl) tsEl.value = String(Date.now());
-              setMsg("Thank you — we’ll be in touch.", "is-ok");
+              setMsg(I18N[lang].formOk, "is-ok");
             } else if (res.d.error === "not_configured") {
-              setMsg("Form isn’t live yet — please email us directly.", "is-err");
+              setMsg(I18N[lang].formNotConfigured, "is-err");
             } else {
-              setMsg("Something went wrong — please email us directly.", "is-err");
+              setMsg(I18N[lang].formError, "is-err");
             }
           })
-          .catch(function () { setMsg("Network error — please email us directly.", "is-err"); })
+          .catch(function () { setMsg(I18N[lang].formNetwork, "is-err"); })
           .finally(function () { if (btn) btn.disabled = false; });
       });
     })(cforms[ci]);

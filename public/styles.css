@@ -171,6 +171,9 @@ body::after {
   align-self: center;
   width: 100%;
 }
+.mega__panel[data-panel="Casa Teo"] .mega__col--right {
+  transform: translateY(-50%);
+}
 .mega__panel--about.is-active {
   display: flex;
   justify-content: flex-end;
@@ -178,13 +181,26 @@ body::after {
   min-height: 0;
 }
 .mega__panel--about .mega__item {
+  position: relative;
   align-items: flex-end;
   min-width: 8rem;
   padding: .35rem 0;
+  border-top: 0;
   text-align: right;
 }
-.mega__panel--about .mega__item:first-child {
-  border-top: 0;
+.mega__panel--about .mega__item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 1px;
+  background: var(--ink);
+  transition: right .3s var(--ease);
+}
+.mega__panel--about .mega__item:hover::after,
+.mega__panel--about .mega__item:focus-visible::after {
+  right: 0;
 }
 .mega__col--right {
   order: 2;
@@ -409,6 +425,11 @@ body::after {
   display: block;
   overflow: hidden;
   margin-bottom: .85rem;
+  aspect-ratio: 4 / 3;
+}
+.option-card__media img {
+  height: 100%;
+  object-fit: cover;
 }
 .option-card__title {
   font-family: var(--display);
@@ -555,6 +576,7 @@ body::after {
 }
 .post__meta { color: var(--grey); }
 .post__title {
+  font-weight: 700;
   font-size: clamp(1.26rem, 3.15vw, 2.88rem);
 }
 .post__dek {
@@ -732,8 +754,11 @@ html { scroll-behavior: smooth; }
   background: var(--paper);
 }
 .cpage--contact .cbox {
-  max-width: 760px;
+  max-width: 860px;
   padding: clamp(2rem, 5vw, 4rem);
+}
+.cpage--contact .cbox__title {
+  font-weight: 700;
 }
 .cpage--consulting {
   padding-top: clamp(2rem, 5vh, 4rem);
