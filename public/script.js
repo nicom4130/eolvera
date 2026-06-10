@@ -113,6 +113,8 @@
       b.classList.toggle("is-active", on);
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
+
+    alignHomeStoryTitles();
   }
 
   var langFadeTimer = null;
@@ -142,6 +144,29 @@
 
   doc.querySelectorAll(".lang__opt").forEach(function (b) {
     b.addEventListener("click", function () { switchLang(b.getAttribute("data-lang-set")); });
+  });
+
+  /* Home option 1 — keep the first title line aligned across centred stories. */
+  var storyAlignTimer = null;
+  function alignHomeStoryTitles() {
+    var grid = doc.querySelector(".home .news-grid");
+    if (!grid) return;
+    var texts = Array.prototype.slice.call(grid.querySelectorAll(".story__text"));
+    if (!texts.length) return;
+    texts.forEach(function (text) { text.style.transform = ""; });
+    window.requestAnimationFrame(function () {
+      var heights = texts.map(function (text) { return text.getBoundingClientRect().height; });
+      var maxHeight = Math.max.apply(Math, heights);
+      texts.forEach(function (text, i) {
+        var offset = Math.max(0, (maxHeight - heights[i]) / 2);
+        text.style.transform = offset ? "translateY(-" + offset.toFixed(2) + "px)" : "";
+      });
+    });
+  }
+
+  window.addEventListener("resize", function () {
+    if (storyAlignTimer) clearTimeout(storyAlignTimer);
+    storyAlignTimer = setTimeout(alignHomeStoryTitles, 120);
   });
 
   /* Presentation-only logo casing toggle. Remove after the final header choice. */
