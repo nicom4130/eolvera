@@ -15,6 +15,22 @@ import { createElement } from 'react';
 //  The build-time reader still reads the committed files from disk, so the
 //  static site renders even before the wizard is done.
 //
+const inlineTitleOptions = {
+  bold: true,
+  italic: true,
+  strikethrough: false,
+  code: false,
+  heading: false,
+  blockquote: false,
+  orderedList: false,
+  unorderedList: false,
+  table: false,
+  link: false,
+  image: false,
+  divider: false,
+  codeBlock: false,
+};
+
 export default config({
   storage: import.meta.env.DEV
     ? { kind: 'local' }
@@ -91,13 +107,24 @@ export default config({
         title: fields.slug({
           name: {
             label: 'Title EN',
+            description: 'Plain title. Used for slug, SEO, admin lists, and as fallback.',
             validation: { isRequired: true },
           },
         }),
+        titleRich: fields.markdoc.inline({
+          label: 'Styled Title EN',
+          description: 'Optional. Use this only when the visible title needs inline bold/italic.',
+          options: inlineTitleOptions,
+        }),
         titleEs: fields.text({
           label: 'Title ES',
-          description: 'Spanish title shown when the site language is ES.',
+          description: 'Plain Spanish title. Used for SEO and as fallback.',
           validation: { isRequired: true },
+        }),
+        titleRichEs: fields.markdoc.inline({
+          label: 'Styled Title ES',
+          description: 'Optional. Spanish visible title with inline bold/italic.',
+          options: inlineTitleOptions,
         }),
         date: fields.date({
           label: 'Date',

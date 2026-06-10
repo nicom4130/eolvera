@@ -15,7 +15,7 @@
     en: {
       menu: "Menu", close: "Close", sections: "Sections",
       news: "News", about: "About", consulting: "Consulting",
-      consultingContact: "Consulting & Contact", option2: "Option 2",
+      consultingContact: "Consulting & Contact", option1: "Option 1", option2: "Option 2",
       otherProjects: "Other Projects", bio: "Bio", contact: "Contact",
       archive: "Archive", all: "All", externalLink: "External Link",
       name: "Name", email: "Email", message: "Message", send: "Send",
@@ -49,7 +49,7 @@
     es: {
       menu: "Menú", close: "Cerrar", sections: "Secciones",
       news: "Noticias", about: "Perfil", consulting: "Consultoría",
-      consultingContact: "Consultoría y Contacto", option2: "Opción 2",
+      consultingContact: "Consultoría y Contacto", option1: "Opción 1", option2: "Opción 2",
       otherProjects: "Otros proyectos", bio: "Bio", contact: "Contacto",
       archive: "Archivo", all: "Todas", externalLink: "Enlace externo",
       name: "Nombre", email: "Correo electrónico", message: "Mensaje", send: "Enviar",
@@ -115,9 +115,61 @@
     });
   }
 
+  var langFadeTimer = null;
+
+  function canFadeLang() {
+    return doc.body && (!window.matchMedia || !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  function switchLang(next) {
+    if (!I18N[next]) next = "en";
+    if (next === lang) return;
+    if (!canFadeLang()) {
+      applyLang(next);
+      return;
+    }
+
+    if (langFadeTimer) clearTimeout(langFadeTimer);
+    doc.body.classList.add("is-lang-fading");
+    langFadeTimer = setTimeout(function () {
+      applyLang(next);
+      window.requestAnimationFrame(function () {
+        doc.body.classList.remove("is-lang-fading");
+        langFadeTimer = null;
+      });
+    }, 120);
+  }
+
   doc.querySelectorAll(".lang__opt").forEach(function (b) {
-    b.addEventListener("click", function () { applyLang(b.getAttribute("data-lang-set")); });
+    b.addEventListener("click", function () { switchLang(b.getAttribute("data-lang-set")); });
   });
+
+  /* Presentation-only logo casing toggle. Remove after the final header choice. */
+  var logoToggle = doc.querySelector("[data-logo-toggle]");
+  if (logoToggle) {
+    var logoClickTimer = null;
+    logoToggle.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      if (logoClickTimer) clearTimeout(logoClickTimer);
+      logoClickTimer = setTimeout(function () {
+        window.location.href = logoToggle.getAttribute("href") || "/";
+        logoClickTimer = null;
+      }, 240);
+    });
+    logoToggle.addEventListener("dblclick", function (e) {
+      e.preventDefault();
+      if (logoClickTimer) {
+        clearTimeout(logoClickTimer);
+        logoClickTimer = null;
+      }
+      var titlecase = logoToggle.getAttribute("data-logo-titlecase") || "Enrique Olvera";
+      var uppercase = logoToggle.getAttribute("data-logo-uppercase") || titlecase.toUpperCase();
+      var isTitlecase = logoToggle.textContent === titlecase;
+      logoToggle.textContent = isTitlecase ? uppercase : titlecase;
+      logoToggle.setAttribute("aria-label", (isTitlecase ? uppercase : titlecase) + " home");
+    });
+  }
 
   /* ---------------------------------------------------------
      Mega menu — NYT-style. Hover (or tap) a ribbon group to drop
@@ -199,6 +251,7 @@
     link.addEventListener("mouseleave", scheduleHide);
     // touch / click: toggle (there is no hover on touch devices)
     link.addEventListener("click", function (e) {
+      if (link.hasAttribute("data-mega-click-through")) return;
       e.preventDefault();
       var open = mega && mega.classList.contains("is-open") && link.classList.contains("is-current");
       open ? hideMega() : showMega(group);

@@ -2,14 +2,25 @@
 // Shared masthead + NYT-style mega-menu. Used by every page so the nav stays
 // in one place. Links are absolute (`/`, `/#news`, `/about`) so they work from
 // any route. The hover/mega + EN/ES behavior lives in /script.js.
+const isOption2 = Astro.url.pathname.startsWith('/option-2');
+const optionHref = isOption2 ? '/' : '/option-2/';
+const optionLabelKey = isOption2 ? 'option1' : 'option2';
+const optionLabel = isOption2 ? 'Option 1' : 'Option 2';
 ---
 <!-- ░░ MASTHEAD — newspaper front page (NYT-style), name set in place of a logo ░░ -->
 <header class="masthead" id="masthead">
 
   <!-- the name replaces the logotype; language sits on the same row -->
   <div class="masthead__top">
-    <a class="masthead__option" href="/option-2/" data-i18n="option2">Option 2</a>
-    <a class="masthead__title" href="/" aria-label="Enrique Olvera — home">Enrique Olvera</a>
+    <a class="masthead__option" href={optionHref} data-i18n={optionLabelKey}>{optionLabel}</a>
+    <a
+      class="masthead__title"
+      href="/"
+      aria-label="Enrique Olvera home"
+      data-logo-toggle
+      data-logo-uppercase="ENRIQUE OLVERA"
+      data-logo-titlecase="Enrique Olvera"
+    >ENRIQUE OLVERA</a>
     <div class="lang" data-lang>
       <button class="lang__opt is-active" data-lang-set="en" type="button" aria-pressed="true">EN</button>
       <span class="lang__sep" aria-hidden="true">/</span>
@@ -29,7 +40,7 @@
     <a class="ribbon__link" href="#" data-mega="Casa Teo">Casateo</a>
     <a class="ribbon__link" href="/consulting" data-i18n="consulting">Consulting</a>
     <a class="ribbon__link" href="#" data-mega="Projects" data-i18n="otherProjects">Other Projects</a>
-    <a class="ribbon__link" href="/about" data-mega="About" data-i18n="about">About</a>
+    <a class="ribbon__link" href="/about" data-mega="About" data-mega-click-through data-i18n="about">About</a>
   </nav>
 
   <!-- ░░ MEGA MENU — NYT-style full-width dropdown. Each group is laid out as

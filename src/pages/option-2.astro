@@ -3,6 +3,7 @@ import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
+import { richTitlePair } from '../lib/richTitle';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 
@@ -27,7 +28,7 @@ const langPair = (en?: string | null, es?: string | null) => ({
 
 const lead = news[0];
 const secondaryNews = news.slice(1, 4);
-const leadTitle = lead ? langPair(lead.title, lead.titleEs) : null;
+const leadTitle = lead ? richTitlePair(lead.title, lead.titleEs, lead.titleRich, lead.titleRichEs) : null;
 const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 ---
 
@@ -55,13 +56,13 @@ const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
     <section class="option-front" aria-label="News option 2">
       {lead && (
         <article class="option-lead">
-          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={leadTitle?.en}>
+          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={leadTitle?.enText}>
             <img src={imgSrc(lead.image)} alt="" loading="eager" decoding="async" />
           </a>
           <div class="option-lead__body">
             <h1 class="option-lead__title">
-              <span data-lang-content="en">{leadTitle?.en}</span>
-              <span data-lang-content="es" hidden>{leadTitle?.es}</span>
+              <span data-lang-content="en" set:html={leadTitle?.enHtml}></span>
+              <span data-lang-content="es" hidden set:html={leadTitle?.esHtml}></span>
             </h1>
             {(leadExcerpt?.en || leadExcerpt?.es) && (
               <>
@@ -77,18 +78,18 @@ const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 
       <div class="option-grid">
         {secondaryNews.map((item) => {
-          const title = langPair(item.title, item.titleEs);
+          const title = richTitlePair(item.title, item.titleEs, item.titleRich, item.titleRichEs);
           const excerpt = langPair(item.excerpt, item.excerptEs);
 
           return (
             <article class="option-card">
-              <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={title.en}>
+              <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={title.enText}>
                 <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
               </a>
               <h2 class="option-card__title">
                 <a href={`/news/${item.slug}/`}>
-                  <span data-lang-content="en">{title.en}</span>
-                  <span data-lang-content="es" hidden>{title.es}</span>
+                  <span data-lang-content="en" set:html={title.enHtml}></span>
+                  <span data-lang-content="es" hidden set:html={title.esHtml}></span>
                 </a>
               </h2>
               {(excerpt.en || excerpt.es) && (

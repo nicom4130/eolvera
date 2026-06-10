@@ -3,6 +3,7 @@ import Masthead from '../../components/Masthead.astro';
 import Footer from '../../components/Footer.astro';
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../../keystatic.config';
+import { richTitlePair } from '../../lib/richTitle';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 const entries = await reader.collections.news.all();
@@ -60,7 +61,7 @@ const categories = categoryEntries.map((category) => category.slug);
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
   <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -88,7 +89,7 @@ const categories = categoryEntries.map((category) => category.slug);
 
     <section class="archive-grid" aria-label="News archive" data-news-grid>
       {posts.map((post) => {
-        const title = langPair(post.title, post.titleEs);
+        const title = richTitlePair(post.title, post.titleEs, post.titleRich, post.titleRichEs);
         const excerpt = langPair(post.excerpt, post.excerptEs);
         const category = labelFor(post.category);
         const date = formatDate(post.date);
@@ -103,8 +104,8 @@ const categories = categoryEntries.map((category) => category.slug);
                 <span class="archive-card__meta" data-lang-content="en">{category.en}{date.en && ` / ${date.en}`}</span>
                 <span class="archive-card__meta" data-lang-content="es" hidden>{category.es}{date.es && ` / ${date.es}`}</span>
                 <h2 class="archive-card__title">
-                  <span data-lang-content="en">{title.en}</span>
-                  <span data-lang-content="es" hidden>{title.es}</span>
+                  <span data-lang-content="en" set:html={title.enHtml}></span>
+                  <span data-lang-content="es" hidden set:html={title.esHtml}></span>
                 </h2>
                 {(excerpt.en || excerpt.es) && (
                   <>
