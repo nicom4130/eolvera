@@ -91,6 +91,7 @@ body::after {
 .masthead__top { position: relative; }
 .masthead__option {
   position: absolute; top: 0; left: 0;
+  z-index: 2;
   font-family: var(--sans);
   font-size: 12px;
   line-height: 20px;

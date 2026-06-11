@@ -33,7 +33,12 @@ import Footer from '../components/Footer.astro';
         <h1 class="cbox__title" data-i18n="consulting">Consulting</h1>
         <p class="cbox__lead" data-lang-content="en">In addition to the creative direction of the hospitality projects grouped under Casamata, Enrique Olvera&rsquo;s experience and his interest in sharing the knowledge gained have led to comprehensive consulting for projects that require it. This includes conceptualization, creative support, and feasibility analysis, whether it be for overall proposals, context, or operations, both in Mexico and abroad.</p>
         <p class="cbox__lead" data-lang-content="es" hidden>Además de la dirección creativa de los proyectos de hospitalidad agrupados bajo Casamata, la experiencia de Enrique Olvera y su interés por compartir el conocimiento adquirido lo han llevado a ofrecer consultoría integral para proyectos que lo requieren. Esto incluye conceptualización, apoyo creativo y análisis de viabilidad, ya sea para propuestas generales, contexto u operación, tanto en México como en el extranjero.</p>
-        <form class="cform cform--inline" action="mailto:hello@enriqueolvera.com" method="post" enctype="text/plain">
+        <form class="cform cform--inline" action="/api/contact" method="post" data-cform>
+          <input type="hidden" name="source" value="consulting" />
+          <input type="hidden" name="_t" value="" data-cform-ts />
+          <input type="hidden" name="name" value="Consulting inquiry" />
+          <input type="hidden" name="message" value="Consulting inquiry from email-only form." />
+          <input type="hidden" name="company" value="" autocomplete="off" />
           <label class="cform__label" for="consulting-email" data-i18n="email">Email</label>
           <div class="cform__inline-row">
             <input class="cform__input" id="consulting-email" name="email" type="email" autocomplete="email" required />
