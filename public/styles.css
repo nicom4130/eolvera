@@ -643,7 +643,6 @@ body.is-lang-fading [data-lang-content] {
   color: var(--ink-2);
 }
 .post__figure {
-  border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 .post__figure img {
