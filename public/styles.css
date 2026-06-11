@@ -356,7 +356,6 @@ body.is-lang-fading [data-lang-content] {
   align-items: center;
   justify-content: center;
   min-height: clamp(3.25rem, 7vh, 4.75rem);
-  border-top: 1px solid var(--line);
   font-family: var(--sans);
   font-size: 13px;
   line-height: 15px;
