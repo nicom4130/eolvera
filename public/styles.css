@@ -401,6 +401,7 @@ body.is-lang-fading [data-lang-content] {
   display: block;
   overflow: hidden;
   grid-column: span 2;
+  height: clamp(520px, calc(100svh - 310px), 900px);
 }
 .option-lead__media img,
 .option-card__media img {
@@ -408,6 +409,10 @@ body.is-lang-fading [data-lang-content] {
   height: auto;
   filter: none;
   transition: opacity .4s var(--ease), transform .7s var(--ease);
+}
+.option-lead__media img {
+  height: 100%;
+  object-fit: cover;
 }
 .option-lead__media:hover img,
 .option-card:hover .option-card__media img {
