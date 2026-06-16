@@ -1,10 +1,4 @@
 ---
-// ============================================================
-//  ENRIQUE OLVERA — home (front-page news)
-//  Static page. Masthead + mega-menu live in <Masthead/> (shared). Only the
-//  NEWS section is dynamic: cards come from the Keystatic `news` collection,
-//  read at build time. Ordered by date desc; the pinned one (or newest) leads.
-// ============================================================
 import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
 import { createReader } from '@keystatic/core/reader';
@@ -15,8 +9,6 @@ const reader = createReader(process.cwd(), keystaticConfig);
 
 const entries = await reader.collections.news.all();
 
-// newest first; pinned stories still rise to the front, but the home shows a
-// strict four-story editorial row.
 const news = entries
   .map((e) => ({ slug: e.slug, ...e.entry }))
   .sort((a, b) => {
@@ -25,8 +17,6 @@ const news = entries
     return (a.date ?? '') < (b.date ?? '') ? 1 : -1;
   });
 
-// The Keystatic image field stores only the filename; resolve it against the
-// field's publicPath so the <img src> points at the real file under /public.
 const IMG_BASE = '/images/news/';
 const imgSrc = (file?: string | null) =>
   !file ? '' : file.startsWith('/') ? file : IMG_BASE + file;
@@ -36,8 +26,10 @@ const langPair = (en?: string | null, es?: string | null) => ({
   es: es || en || '',
 });
 
-const featuredNews = news.slice(0, 4);
-
+const lead = news[0];
+const secondaryNews = news.slice(1, 4);
+const leadTitle = lead ? richTitlePair(lead.title, lead.titleEs, lead.titleRich, lead.titleRichEs) : null;
+const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 ---
 
 <!DOCTYPE html>
@@ -49,54 +41,70 @@ const featuredNews = news.slice(0, 4);
   <meta name="description" content="The gastronomic universe of Enrique Olvera — news, restaurants and projects." />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="/favicon.ico" />
-
-  <!-- Type system: Bodoni Moda (display Didone) + locally-bundled Sofia Pro
-       (the only sans — used for body and all labels). -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet" />
   <link rel="preload" href="/fonts/sofiapro-light.otf" as="font" type="font/otf" crossorigin />
   <link rel="stylesheet" href="/styles.css" />
 </head>
-<body class="home">
+<body class="option-home">
 
   <Masthead />
 
-  <!-- ░░ HOME — the content is a four-column news front page ░░ -->
-  <main class="paper" id="top">
-
+  <main class="paper option-paper" id="top">
     <a id="news"></a>
-    <section class="front" aria-label="News">
-      <div class="news-grid" id="mosaic">
-        {featuredNews.map((item) => {
+    <section class="option-front" aria-label="News">
+      {lead && (
+        <article class="option-lead">
+          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={leadTitle?.enText}>
+            <img src={imgSrc(lead.image)} alt="" loading="eager" decoding="async" />
+          </a>
+          <div class="option-lead__body">
+            <h1 class="option-lead__title">
+              <span data-lang-content="en" set:html={leadTitle?.enHtml}></span>
+              <span data-lang-content="es" hidden set:html={leadTitle?.esHtml}></span>
+            </h1>
+            {(leadExcerpt?.en || leadExcerpt?.es) && (
+              <>
+                <p class="option-lead__dek" data-lang-content="en">{leadExcerpt.en}</p>
+                <p class="option-lead__dek" data-lang-content="es" hidden>{leadExcerpt.es}</p>
+              </>
+            )}
+          </div>
+        </article>
+      )}
+
+      <div class="rule rule--hair option-front__split"></div>
+
+      <div class="option-grid">
+        {secondaryNews.map((item) => {
           const title = richTitlePair(item.title, item.titleEs, item.titleRich, item.titleRichEs);
           const excerpt = langPair(item.excerpt, item.excerptEs);
 
           return (
-            <article class="story">
-              <img class="story__image" src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
-              <a class="story__inner" href={`/news/${item.slug}/`} aria-label={title.enText}>
-                <div class="story__text">
-                  <h3 class="story__title">
-                    <span data-lang-content="en" set:html={title.enHtml}></span>
-                    <span data-lang-content="es" hidden set:html={title.esHtml}></span>
-                  </h3>
-                  <span class="story__rule" aria-hidden="true"></span>
-                  {(excerpt.en || excerpt.es) && (
-                    <>
-                      <p class="story__expert" data-lang-content="en">{excerpt.en}</p>
-                      <p class="story__expert" data-lang-content="es" hidden>{excerpt.es}</p>
-                    </>
-                  )}
-                </div>
+            <article class="option-card">
+              <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={title.enText}>
+                <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
               </a>
+              <h2 class="option-card__title">
+                <a href={`/news/${item.slug}/`}>
+                  <span data-lang-content="en" set:html={title.enHtml}></span>
+                  <span data-lang-content="es" hidden set:html={title.esHtml}></span>
+                </a>
+              </h2>
+              {(excerpt.en || excerpt.es) && (
+                <>
+                  <p class="option-card__excerpt" data-lang-content="en">{excerpt.en}</p>
+                  <p class="option-card__excerpt" data-lang-content="es" hidden>{excerpt.es}</p>
+                </>
+              )}
             </article>
           );
         })}
       </div>
+
       <a class="front__archive" href="/news" data-i18n="archive">Archive</a>
     </section>
-
   </main>
 
   <Footer />

@@ -15,7 +15,7 @@
     en: {
       menu: "Menu", close: "Close", sections: "Sections",
       news: "News", about: "About", consulting: "Consulting",
-      consultingContact: "Consulting & Contact", option1: "Option 1", option2: "Option 2",
+      consultingContact: "Consulting & Contact",
       otherProjects: "Other Projects", bio: "Bio", contact: "Contact",
       archive: "Archive", all: "All", externalLink: "External Link",
       name: "Name", email: "Email", message: "Message", send: "Send",
@@ -49,7 +49,7 @@
     es: {
       menu: "Menú", close: "Cerrar", sections: "Secciones",
       news: "Noticias", about: "Perfil", consulting: "Consultoría",
-      consultingContact: "Consultoría y Contacto", option1: "Opción 1", option2: "Opción 2",
+      consultingContact: "Consultoría y Contacto",
       otherProjects: "Otros proyectos", bio: "Bio", contact: "Contacto",
       archive: "Archivo", all: "Todas", externalLink: "Enlace externo",
       name: "Nombre", email: "Correo electrónico", message: "Mensaje", send: "Enviar",
@@ -168,33 +168,6 @@
     if (storyAlignTimer) clearTimeout(storyAlignTimer);
     storyAlignTimer = setTimeout(alignHomeStoryTitles, 120);
   });
-
-  /* Presentation-only logo casing toggle. Remove after the final header choice. */
-  var logoToggle = doc.querySelector("[data-logo-toggle]");
-  if (logoToggle) {
-    var logoClickTimer = null;
-    logoToggle.addEventListener("click", function (e) {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      e.preventDefault();
-      if (logoClickTimer) clearTimeout(logoClickTimer);
-      logoClickTimer = setTimeout(function () {
-        window.location.href = logoToggle.getAttribute("href") || "/";
-        logoClickTimer = null;
-      }, 240);
-    });
-    logoToggle.addEventListener("dblclick", function (e) {
-      e.preventDefault();
-      if (logoClickTimer) {
-        clearTimeout(logoClickTimer);
-        logoClickTimer = null;
-      }
-      var titlecase = logoToggle.getAttribute("data-logo-titlecase") || "Enrique Olvera";
-      var uppercase = logoToggle.getAttribute("data-logo-uppercase") || titlecase.toUpperCase();
-      var isTitlecase = logoToggle.textContent === titlecase;
-      logoToggle.textContent = isTitlecase ? uppercase : titlecase;
-      logoToggle.setAttribute("aria-label", (isTitlecase ? uppercase : titlecase) + " home");
-    });
-  }
 
   /* ---------------------------------------------------------
      Mega menu — NYT-style. Hover (or tap) a ribbon group to drop
