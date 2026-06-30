@@ -967,8 +967,8 @@ html { scroll-behavior: smooth; }
   min-height: 42px;
   padding-top: .7rem;
   padding-bottom: .55rem;
-  color: var(--line);
-  border-color: var(--line);
+  color: rgba(10,10,10,.32);
+  border-color: rgba(10,10,10,.32);
 }
 .cpage--consulting .cform__submit:hover {
   background: transparent;
