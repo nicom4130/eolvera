@@ -903,7 +903,7 @@ html { scroll-behavior: smooth; }
 .cpage--consulting .cbox {
   display: grid;
   justify-items: center;
-  width: min(860px, 100%);
+  width: min(940px, 100%);
   max-width: none;
   border: 0;
   padding: clamp(2.2rem, 5vw, 4rem) clamp(.53rem, 1.67vw, 1.5rem);
@@ -914,14 +914,14 @@ html { scroll-behavior: smooth; }
 .cpage--consulting .cbox__lead,
 .cpage--consulting .cform,
 .cpage--consulting .cbox__note {
-  width: min(780px, 100%);
+  width: min(860px, 100%);
 }
 .cpage--consulting .cbox__lead {
   max-width: none;
   margin-bottom: 0;
   font-family: var(--display);
-  font-size: 14px;
-  line-height: 21px;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 400;
   letter-spacing: 0;
   color: var(--ink);
@@ -967,6 +967,13 @@ html { scroll-behavior: smooth; }
   min-height: 42px;
   padding-top: .7rem;
   padding-bottom: .55rem;
+  color: var(--line);
+  border-color: var(--line);
+}
+.cpage--consulting .cform__submit:hover {
+  background: transparent;
+  color: var(--grey-2);
+  border-color: var(--grey-2);
 }
 .page-consulting .colophon {
   margin-top: 0;
