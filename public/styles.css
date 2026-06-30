@@ -972,8 +972,8 @@ html { scroll-behavior: smooth; }
 }
 .cpage--consulting .cform__submit:hover {
   background: transparent;
-  color: var(--grey-2);
-  border-color: var(--grey-2);
+  color: rgba(10,10,10,.56);
+  border-color: rgba(10,10,10,.42);
 }
 .page-consulting .colophon {
   margin-top: 0;
