@@ -182,10 +182,8 @@ body.is-lang-fading [data-lang-content] {
 .mega__panel[data-panel="Casa Teo"] .mega__col,
 .mega__panel[data-panel="Projects"] .mega__col {
   align-self: center;
+  justify-content: center;
   width: 100%;
-}
-.mega__panel[data-panel="Casa Teo"] .mega__col--right {
-  transform: translateY(-50%);
 }
 .mega__panel--about.is-active {
   display: flex;
@@ -851,10 +849,10 @@ html { scroll-behavior: smooth; }
 .cpage { padding: clamp(2.5rem, 7vh, 6rem) var(--pad); display: flex; justify-content: center; }
 .cpage--contact { border-top: 1px solid var(--line); }
 .cpage--contact {
-  min-height: 100svh;
+  min-height: 0;
   align-items: stretch;
   justify-content: stretch;
-  padding: 0;
+  padding: clamp(2rem, 4vw, 3.4rem) var(--pad) clamp(1.8rem, 3.6vw, 3.06rem);
 }
 .cbox {
   width: 100%; max-width: 620px;
@@ -864,57 +862,50 @@ html { scroll-behavior: smooth; }
 }
 .cpage--contact .cbox {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  row-gap: .9rem;
   max-width: none;
-  min-height: 100svh;
   border: 0;
-  padding: clamp(2rem, 4vw, 3.4rem) var(--pad) 1rem;
+  min-height: 0;
+  padding: 0;
 }
 .cpage--contact .cbox__title {
   font-weight: 500;
-}
-.cpage--contact .cbox__lead {
-  max-width: none;
   margin-bottom: 0;
 }
-.cpage--contact .cform {
-  align-self: start;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(2rem, 4vw, 4.5rem);
-  row-gap: clamp(1.2rem, 2.8vw, 2.3rem);
-  margin-top: clamp(5rem, 9vw, 7.5rem);
-}
-.cpage--contact .cform__field:nth-of-type(3),
-.cpage--contact .cform__msg {
-  grid-column: 1 / -1;
-}
-.cpage--contact .cform__textarea {
-  min-height: clamp(4rem, 8vw, 5.25rem);
-}
-.cpage--contact .cform__submit {
-  grid-column: 2;
-  justify-self: end;
-  min-width: 116px;
-  min-height: 42px;
-  margin-top: 0;
-}
-.cpage--contact .cbox__note {
-  align-self: end;
+.cpage--contact .cbox__contact-line {
   margin: 0;
+  font-family: var(--display);
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-2);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 14;
+}
+.cpage--contact .cbox__contact-line a {
+  color: var(--ink);
+  border-bottom: 0;
+  opacity: .72;
+  transition: opacity .22s var(--ease), color .22s var(--ease);
+}
+.cpage--contact .cbox__contact-line a:hover {
+  color: var(--ink);
+  opacity: 1;
 }
 .cpage--consulting {
   min-height: calc(100svh - 256px);
   align-items: center;
   justify-content: center;
   padding: clamp(2rem, 5vw, 5rem) var(--pad);
+  background: #fff;
 }
 .cpage--consulting .cbox {
   display: grid;
   justify-items: center;
   width: min(860px, 100%);
   max-width: none;
-  border: 1px solid var(--line);
+  border: 0;
   padding: clamp(2.2rem, 5vw, 4rem) clamp(.53rem, 1.67vw, 1.5rem);
   background: #fff;
   text-align: left;
@@ -928,9 +919,35 @@ html { scroll-behavior: smooth; }
 .cpage--consulting .cbox__lead {
   max-width: none;
   margin-bottom: 0;
+  font-family: var(--display);
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 14;
 }
 .cpage--consulting .cbox__note {
   margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 300;
+  letter-spacing: .06em;
+  color: var(--grey);
+}
+.cpage--consulting .cbox__note a {
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 300;
+  letter-spacing: .06em;
+  color: inherit;
+  border-bottom: 0;
+}
+.cpage--consulting .cbox__note a:hover {
+  color: var(--ink);
 }
 .cpage--consulting .cform {
   margin-top: clamp(1.3rem, 2.4vw, 2rem);
@@ -942,15 +959,21 @@ html { scroll-behavior: smooth; }
   width: 100%;
 }
 .cpage--consulting .cform__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   justify-self: end;
   min-width: 164px;
   min-height: 42px;
+  padding-top: .7rem;
+  padding-bottom: .55rem;
 }
 .page-consulting .colophon {
   margin-top: 0;
 }
 .page-consulting .paper {
   padding-top: 0;
+  background: #fff;
 }
 .cbox__title {
   font-family: var(--display);
@@ -1042,12 +1065,6 @@ html { scroll-behavior: smooth; }
   .mham { display: block; }
   .cpage--consulting .cbox {
     grid-template-columns: 1fr;
-  }
-  .cpage--contact .cform {
-    grid-template-columns: 1fr;
-  }
-  .cpage--contact .cform__submit {
-    grid-column: 1;
   }
   .cform__inline-row {
     grid-template-columns: 1fr;

@@ -2,12 +2,10 @@
 // ============================================================
 //  ENRIQUE OLVERA — About (Bio + Contact)
 //  Bio ported from proposal 3 (text left, single fixed portrait right).
-//  Two submenus (Bio / Contact) via a sticky sub-nav; Contact uses the framed
-//  form posting to our own /api/contact. Masthead/Footer shared.
+//  Two submenus (Bio / Contact) via a sticky sub-nav. Masthead/Footer shared.
 // ============================================================
 import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
-import ContactForm from '../components/ContactForm.astro';
 ---
 
 <!DOCTYPE html>
@@ -67,11 +65,8 @@ import ContactForm from '../components/ContactForm.astro';
     <section class="cpage cpage--contact" id="contact" aria-label="Contact">
       <div class="cbox">
         <h2 class="cbox__title" data-i18n="contact">Contact</h2>
-        <p class="cbox__lead" data-lang-content="en">For general enquiries, collaborations and press, reach out below or write to us directly.</p>
-        <p class="cbox__lead" data-lang-content="es" hidden>Para consultas generales, colaboraciones y prensa, escríbenos abajo o contáctanos directamente por email.</p>
-        <ContactForm source="about-contact" submit="Send" />
-        <p class="cbox__note" data-lang-content="en">General enquiries, <a href="mailto:hello@enriqueolvera.com">hello@enriqueolvera.com</a></p>
-        <p class="cbox__note" data-lang-content="es" hidden>Consultas generales, <a href="mailto:hello@enriqueolvera.com">hello@enriqueolvera.com</a></p>
+        <p class="cbox__contact-line" data-lang-content="en">General enquiries, <a href="mailto:news.eolvera@gmail.com" target="_blank" rel="noopener noreferrer">news.eolvera@gmail.com</a></p>
+        <p class="cbox__contact-line" data-lang-content="es" hidden>Consultas generales, <a href="mailto:news.eolvera@gmail.com" target="_blank" rel="noopener noreferrer">news.eolvera@gmail.com</a></p>
       </div>
     </section>
 
