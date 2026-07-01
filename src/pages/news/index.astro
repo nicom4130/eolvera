@@ -46,7 +46,10 @@ const posts = entries
   .map((e) => ({ slug: e.slug, ...e.entry }))
   .sort((a, b) => ((a.date ?? '') < (b.date ?? '') ? 1 : -1));
 
-const categories = categoryEntries.map((category) => category.slug);
+const usedCategories = new Set(posts.map((post) => post.category).filter(Boolean));
+const categories = categoryEntries
+  .map((category) => category.slug)
+  .filter((slug) => usedCategories.has(slug));
 ---
 
 <!DOCTYPE html>
@@ -56,6 +59,8 @@ const categories = categoryEntries.map((category) => category.slug);
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archive — Enrique Olvera</title>
   <meta name="description" content="News archive from the gastronomic universe of Enrique Olvera." />
+  <link rel="icon" href="/favicon-dark.png" type="image/png" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="/favicon.ico" />
 

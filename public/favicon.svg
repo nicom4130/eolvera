@@ -1,5 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Enrique Olvera">
-  <rect width="128" height="128" fill="#f4f3f1"/>
-  <path fill="#0a0a0a" d="M35 26h61v12H50v22h36v10H50v20h49v12H35v-6h6V32h-6z"/>
-  <path fill="#0a0a0a" d="M31 26h18v8H31zM31 94h19v8H31zM31 60h17v10H31z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Enrique Olvera">
+  <rect width="512" height="512" fill="#292923"/>
+  <text x="52" y="358" fill="#f4f3f1" font-family="Bodoni 72, Bodoni Moda, Didot, Georgia, serif" font-size="288" font-weight="500" letter-spacing="-8">EO</text>
 </svg>
