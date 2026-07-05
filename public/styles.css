@@ -762,7 +762,9 @@ body.home .colophon,
 }
 .about__portrait {
   position: relative;
-  height: 762px;
+  width: 100%;
+  aspect-ratio: 1197 / 1600;
+  height: auto;
   overflow: hidden;
   background: #ececec;
 }
@@ -771,7 +773,7 @@ body.home .colophon,
   position: absolute; right: 1rem; bottom: 1rem;
   text-align: right;
   font-family: var(--sans); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--ink);
+  color: #fff;
 }
 @media (max-width: 880px) {
   .about { grid-template-columns: 1fr; }
@@ -1305,9 +1307,11 @@ html { scroll-behavior: smooth; }
     width: 100%;
     margin-left: 0;
     margin-right: 0;
-    height: 620px;
+    aspect-ratio: 1197 / 1600;
+    height: auto;
   }
   .about__photo {
+    object-fit: cover;
     object-position: 50% 50%;
   }
   .about__credit {
