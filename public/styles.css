@@ -9,11 +9,28 @@
 
 @font-face {
   font-family: "Sofia Pro";
-  src: url("fonts/sofiapro-light.otf") format("opentype");
-  /* Only Sofia Pro Light is bundled. Declaring the range up to 400 keeps body
-     text at the file's real weight, and lets heavier requests (the menu, 600)
-     fall back to a synthesised bold until a real Semibold/Bold is dropped in. */
-  font-weight: 100 400; font-style: normal; font-display: swap;
+  src: url("fonts/sofiapro-light.woff") format("woff");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("fonts/sofiapro-regular.woff") format("woff");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("fonts/sofiapro-medium.woff") format("woff");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("fonts/sofiapro-semibold.woff") format("woff");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("fonts/sofiapro-bold.woff") format("woff");
+  font-weight: 700; font-style: normal; font-display: swap;
 }
 
 :root {
@@ -134,7 +151,7 @@ body.is-lang-fading [data-lang-content] {
   letter-spacing: .15em;
   text-transform: uppercase;
 }
-.ribbon__link { color: var(--ink-2); position: relative; z-index: 130; font-weight: 700; transition: color .2s; }
+.ribbon__link { color: var(--ink-2); position: relative; z-index: 130; font-weight: 600; letter-spacing: 0.17em; transition: color .2s; }
 .ribbon__link:hover { color: var(--ink); }
 /* the hover underline drops down onto the menu line below, so the two coincide */
 .ribbon__link::after {
@@ -726,16 +743,16 @@ body.home .colophon,
    =========================================================== */
 .about {
   display: grid;
-  grid-template-columns: minmax(0, 755fr) minmax(0, 589fr);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) clamp(560px, 45.6vw, 760px);
+  align-items: stretch;
   gap: 0;
 }
 .about__text { padding: 37px var(--pad) clamp(2.5rem, 6vw, 5rem); }
 .about__text > * { max-width: 690px; }
 .about__title {
   font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(40px, 2.9761904762vw, 76px);
+  font-weight: 400;
+  font-size: clamp(38px, 2.8273809524vw, 74px);
   line-height: 1.075;
   letter-spacing: .2em;
   margin: 0 0 78px;
@@ -743,16 +760,16 @@ body.home .colophon,
 }
 .about__body p {
   font-family: var(--display);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 19px;
+  line-height: 21px;
   letter-spacing: 0;
   color: var(--ink-2);
 }
 .about__body p + p { margin-top: 1.3rem; }
 .about__body p:first-child {
   font-family: var(--display);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   font-style: normal;
   line-height: 21px;
@@ -763,7 +780,6 @@ body.home .colophon,
 .about__portrait {
   position: relative;
   width: 100%;
-  aspect-ratio: 1197 / 1600;
   height: auto;
   overflow: hidden;
   background: #ececec;
@@ -780,6 +796,74 @@ body.home .colophon,
   .about__portrait { position: static; height: clamp(360px, 58vh, 600px); order: -1; }
   .about__text { padding: clamp(1.6rem, 5vw, 2.6rem) var(--pad) clamp(2rem, 6vw, 3.5rem); }
   .about__text > * { max-width: none; }
+}
+@media (min-width: 881px) {
+  .about {
+    min-height: calc(clamp(560px, 45.6vw, 760px) * 1645 / 1201 * 1.08);
+  }
+  .about__photo {
+    position: absolute;
+    inset: 0;
+    object-position: 100% 50%;
+  }
+}
+@media (min-width: 761px) and (max-width: 880px) {
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 35fr) minmax(0, 65fr);
+    grid-template-rows: 1fr auto auto auto;
+    column-gap: 0;
+    row-gap: 42px;
+    padding: 0 0 58px var(--pad);
+    min-height: 0;
+  }
+  .about__text,
+  .about__body:not([hidden]) {
+    display: contents;
+  }
+  .about__text > * {
+    max-width: none;
+  }
+  .about__title {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    margin: 0 0 42px;
+  }
+  .about__body:not([hidden]) p:first-child {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: start;
+    max-width: 22ch;
+    margin: 0;
+  }
+  .about__portrait {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-self: stretch;
+    position: relative;
+    order: initial;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1201 / 1645;
+    margin: 0;
+  }
+  .about__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 100% 50%;
+  }
+  .about__body:not([hidden]) p:not(:first-child) {
+    grid-column: 1 / -1;
+    max-width: none;
+    padding-right: var(--pad);
+  }
+  .about__body:not([hidden]) p:nth-child(2) {
+    margin-top: 0;
+  }
 }
 
 /* ===========================================================
@@ -833,6 +917,20 @@ html.mnav-open { overflow: hidden; }
   font-family: var(--display); font-size: 1.45rem; color: var(--ink);
 }
 
+@media (min-width: 761px) and (max-width: 880px) {
+  .ribbon,
+  .mega {
+    display: none;
+  }
+  .mham {
+    display: block;
+    top: 18px;
+    left: 0;
+    width: 29px;
+    height: 21px;
+  }
+}
+
 /* ===========================================================
    IMAGE FADE-IN — subtle entrance on content imagery.
    `backwards` so it doesn't override the news hover opacity.
@@ -873,7 +971,7 @@ html { scroll-behavior: smooth; }
   padding: 0;
 }
 .cpage--contact .cbox__title {
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 0;
 }
 .cpage--contact .cbox__contact-line {
@@ -987,8 +1085,8 @@ html { scroll-behavior: smooth; }
 }
 .cbox__title {
   font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(40px, 2.9761904762vw, 76px);
+  font-weight: 400;
+  font-size: clamp(38px, 2.8273809524vw, 74px);
   line-height: 1.075;
   letter-spacing: .2em;
   margin: 0 0 15px;
