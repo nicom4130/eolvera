@@ -934,7 +934,7 @@ html.mnav-open { overflow: hidden; }
     height: 21px;
   }
   .mnav {
-    padding: 149px var(--pad) 3rem;
+    padding: 96px var(--pad) 3rem;
   }
   .mnav__inner {
     gap: 0;
@@ -948,10 +948,10 @@ html.mnav-open { overflow: hidden; }
     min-height: 82px;
     padding: 25px 0;
     font-family: var(--sans);
-    font-size: 16px;
+    font-size: 15px;
     line-height: 32px;
     font-weight: 700;
-    letter-spacing: .15em;
+    letter-spacing: .140625em;
     text-transform: uppercase;
   }
   .macc__head::after {
@@ -974,19 +974,22 @@ html.mnav-open { overflow: hidden; }
     font-size: 14px;
     line-height: 25px;
     font-weight: 500;
-    letter-spacing: .08em;
+    letter-spacing: .10em;
     text-transform: uppercase;
     color: var(--ink-2);
+  }
+  .macc__item:first-child {
+    padding-top: 0;
   }
   .macc__item:last-child {
     padding-bottom: 5px;
   }
   .macc__item em {
     font-family: var(--sans);
-    font-size: 8px;
+    font-size: 9px;
     line-height: 25px;
     font-weight: 300;
-    letter-spacing: .05em;
+    letter-spacing: .05625em;
     color: var(--grey);
   }
 }
@@ -1489,24 +1492,26 @@ html { scroll-behavior: smooth; }
     font-size: 33px;
     line-height: 42px;
     letter-spacing: .1835em;
-    margin-bottom: 54px;
+    margin-bottom: 19.8px;
   }
   .about__body p:first-child {
     max-width: 290px;
     font-family: var(--display);
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 16px;
+    line-height: 24px;
     font-weight: 700;
+    letter-spacing: 0;
   }
   .about__body p {
     font-family: var(--display);
-    font-size: 13px;
-    line-height: 20.6px;
+    font-size: 15px;
+    line-height: 20px;
     font-weight: 400;
+    letter-spacing: 0;
     color: var(--ink-2);
   }
   .about__body p + p {
-    margin-top: 32px;
+    margin-top: 23.328px;
   }
   .cpage--contact {
     padding: 42px var(--pad) 58px;
@@ -1552,11 +1557,12 @@ html { scroll-behavior: smooth; }
     font-size: 33px;
     line-height: 42px;
     letter-spacing: .1835em;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   .cpage--consulting .cbox__lead {
-    font-size: 13px;
-    line-height: 20.6px;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0;
   }
   .cpage--consulting .cform {
     margin-top: 54px;
@@ -1589,7 +1595,7 @@ html { scroll-behavior: smooth; }
     grid-template-columns: 1fr;
   }
   .mnav {
-    padding: 149px var(--pad) 3rem;
+    padding: 96px var(--pad) 3rem;
   }
   .mnav__inner {
     gap: 0;
@@ -1603,10 +1609,10 @@ html { scroll-behavior: smooth; }
     min-height: 82px;
     padding: 25px 0;
     font-family: var(--sans);
-    font-size: 16px;
+    font-size: 15px;
     line-height: 32px;
     font-weight: 700;
-    letter-spacing: .15em;
+    letter-spacing: .140625em;
     text-transform: uppercase;
   }
   .macc__head::after {
@@ -1629,19 +1635,22 @@ html { scroll-behavior: smooth; }
     font-size: 14px;
     line-height: 25px;
     font-weight: 500;
-    letter-spacing: .08em;
+    letter-spacing: .10em;
     text-transform: uppercase;
     color: var(--ink-2);
+  }
+  .macc__item:first-child {
+    padding-top: 0;
   }
   .macc__item:last-child {
     padding-bottom: 5px;
   }
   .macc__item em {
     font-family: var(--sans);
-    font-size: 8px;
+    font-size: 9px;
     line-height: 25px;
     font-weight: 300;
-    letter-spacing: .05em;
+    letter-spacing: .05625em;
     color: var(--grey);
   }
   .colophon {
