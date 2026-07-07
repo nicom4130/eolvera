@@ -12,7 +12,7 @@
       class="masthead__title"
       href="/"
       aria-label="Enrique Olvera home"
-    >ENRIQUE OLVERA</a>
+    ><span>ENRIQUE</span> <span>OLVERA</span></a>
     <div class="lang" data-lang>
       <button class="lang__opt is-active" data-lang-set="en" type="button" aria-pressed="true">EN</button>
       <span class="lang__sep" aria-hidden="true">/</span>
@@ -176,7 +176,14 @@
         </div>
       </div>
 
-      <a class="mnav__link" href="/about" data-i18n="about">About</a>
+      <div class="macc" data-acc>
+        <button class="macc__head" type="button" aria-expanded="false" data-i18n="about">About</button>
+        <div class="macc__body">
+          <a class="macc__item" href="/about#bio" data-i18n="bio">Bio</a>
+          <a class="macc__item" href="/about#contact" data-i18n="contact">Contact</a>
+        </div>
+      </div>
+      <a class="mnav__link" href="/">News</a>
     </div>
   </div>
 </header>

@@ -139,6 +139,9 @@ body.is-lang-fading [data-lang-content] {
   transform: translateY(-8px);
   transform-origin: center;
 }
+.masthead__title span {
+  display: inline;
+}
 
 .ribbon {
   display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between;
@@ -869,7 +872,7 @@ body.home .colophon,
 
 /* ===========================================================
    MOBILE MENU — hamburger (top-left) + full-screen accordion drawer.
-   Hidden on desktop; shown ≤760 (the ribbon/mega hide there).
+   Hidden on desktop; shown ≤1032 so iPad/tablet portrait uses the drawer.
    =========================================================== */
 .mham { display: none; }
 .mham {
@@ -918,7 +921,7 @@ html.mnav-open { overflow: hidden; }
   font-family: var(--display); font-size: 1.45rem; color: var(--ink);
 }
 
-@media (min-width: 761px) and (max-width: 880px) {
+@media (min-width: 761px) and (max-width: 1032px) {
   .ribbon,
   .mega {
     display: none;
@@ -942,18 +945,20 @@ html.mnav-open { overflow: hidden; }
   }
   .macc__head,
   .mnav__link {
-    min-height: 64px;
-    padding: 16px 0;
+    min-height: 82px;
+    padding: 25px 0;
     font-family: var(--sans);
     font-size: 16px;
     line-height: 32px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: .15em;
     text-transform: uppercase;
   }
   .macc__head::after {
-    font-size: 18px;
-    line-height: 18px;
+    font-size: 17px;
+    line-height: 32px;
+    font-weight: 300;
+    letter-spacing: .15em;
     color: var(--ink-2);
   }
   .macc__body {
@@ -968,7 +973,8 @@ html.mnav-open { overflow: hidden; }
     font-family: var(--display);
     font-size: 14px;
     line-height: 25px;
-    letter-spacing: 0;
+    font-weight: 500;
+    letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--ink-2);
   }
@@ -977,9 +983,10 @@ html.mnav-open { overflow: hidden; }
   }
   .macc__item em {
     font-family: var(--sans);
-    font-size: 10px;
-    line-height: 14px;
-    letter-spacing: .18em;
+    font-size: 8px;
+    line-height: 25px;
+    font-weight: 300;
+    letter-spacing: .05em;
     color: var(--grey);
   }
 }
@@ -1232,14 +1239,18 @@ html { scroll-behavior: smooth; }
     width: 210px;
     height: 122px;
     margin: 0 auto;
-    padding: 0;
-    overflow: hidden;
-    text-indent: -9999px;
-    background-image: url("/img/logoeo.png");
-    background-repeat: no-repeat;
-    background-position: center 18px;
-    background-size: 180px auto;
+    padding: 9px 0 0;
+    overflow: visible;
+    text-indent: 0;
+    font-family: var(--display);
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: 400;
+    letter-spacing: .15em;
     transform: none;
+  }
+  .masthead__title span {
+    display: block;
   }
   .lang {
     top: 15px;
@@ -1383,14 +1394,14 @@ html { scroll-behavior: smooth; }
     line-height: 19px;
   }
   .post-page {
-    padding: 34px 0 0;
+    padding: 16px 0 0;
   }
   .post {
     max-width: none;
   }
   .post__head {
     gap: 0;
-    padding: 13px var(--pad) 38px;
+    padding: 0 var(--pad) 38px;
     text-align: center;
   }
   .post__back,
@@ -1414,15 +1425,16 @@ html { scroll-behavior: smooth; }
   .post__title {
     max-width: 293px;
     justify-self: center;
-    font-size: 20px;
+    font-size: 22px;
     line-height: 25px;
     letter-spacing: 0;
   }
   .post__dek {
     max-width: 293px;
     margin-top: 24px;
-    font-size: 14px;
-    line-height: 19px;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0;
   }
   .post__figure {
     border-bottom: 0;
@@ -1435,7 +1447,8 @@ html { scroll-behavior: smooth; }
     margin: 0;
     padding: 42px var(--pad) 0;
     font-size: 15px;
-    line-height: 25px;
+    line-height: 20px;
+    letter-spacing: 0;
   }
   .post__body p + p {
     margin-top: 28px;
@@ -1473,9 +1486,9 @@ html { scroll-behavior: smooth; }
     padding: 40px var(--pad) 54px;
   }
   .about__title {
-    font-size: 36px;
+    font-size: 33px;
     line-height: 42px;
-    letter-spacing: .2em;
+    letter-spacing: .1835em;
     margin-bottom: 54px;
   }
   .about__body p:first-child {
@@ -1487,8 +1500,8 @@ html { scroll-behavior: smooth; }
   }
   .about__body p {
     font-family: var(--display);
-    font-size: 12px;
-    line-height: 19px;
+    font-size: 13px;
+    line-height: 20.6px;
     font-weight: 400;
     color: var(--ink-2);
   }
@@ -1529,21 +1542,21 @@ html { scroll-behavior: smooth; }
   .cpage--consulting .cbox__lead,
   .cpage--consulting .cform,
   .cpage--consulting .cbox__note {
-    width: min(293px, 100%);
+    width: 100%;
   }
   .cpage--consulting .cbox__lead,
   .cpage--consulting .cform {
-    width: min(293px, 100%);
+    width: 100%;
   }
   .cpage--consulting .cbox__title {
-    font-size: 36px;
+    font-size: 33px;
     line-height: 42px;
-    letter-spacing: .2em;
+    letter-spacing: .1835em;
     margin-bottom: 20px;
   }
   .cpage--consulting .cbox__lead {
-    font-size: 12px;
-    line-height: 19px;
+    font-size: 13px;
+    line-height: 20.6px;
   }
   .cpage--consulting .cform {
     margin-top: 54px;
@@ -1554,7 +1567,7 @@ html { scroll-behavior: smooth; }
     letter-spacing: .15em;
   }
   .cpage--consulting .cform__inline-row {
-    margin-top: 64px;
+    margin-top: 36px;
     gap: 48px;
   }
   .cpage--consulting .cform__input {
@@ -1587,18 +1600,20 @@ html { scroll-behavior: smooth; }
   }
   .macc__head,
   .mnav__link {
-    min-height: 64px;
-    padding: 16px 0;
+    min-height: 82px;
+    padding: 25px 0;
     font-family: var(--sans);
     font-size: 16px;
     line-height: 32px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: .15em;
     text-transform: uppercase;
   }
   .macc__head::after {
-    font-size: 18px;
-    line-height: 18px;
+    font-size: 17px;
+    line-height: 32px;
+    font-weight: 300;
+    letter-spacing: .15em;
     color: var(--ink-2);
   }
   .macc__body {
@@ -1613,7 +1628,8 @@ html { scroll-behavior: smooth; }
     font-family: var(--display);
     font-size: 14px;
     line-height: 25px;
-    letter-spacing: 0;
+    font-weight: 500;
+    letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--ink-2);
   }
@@ -1622,9 +1638,10 @@ html { scroll-behavior: smooth; }
   }
   .macc__item em {
     font-family: var(--sans);
-    font-size: 10px;
-    line-height: 14px;
-    letter-spacing: .18em;
+    font-size: 8px;
+    line-height: 25px;
+    font-weight: 300;
+    letter-spacing: .05em;
     color: var(--grey);
   }
   .colophon {
