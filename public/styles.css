@@ -1293,8 +1293,8 @@ html { scroll-behavior: smooth; }
     padding: 56px var(--pad) 58px;
   }
   .option-lead__title {
-    font-size: 22px;
-    line-height: 25px;
+    font-size: 23px;
+    line-height: 26px;
     letter-spacing: 0;
   }
   .option-lead__title::after {
@@ -1329,8 +1329,8 @@ html { scroll-behavior: smooth; }
   }
   .option-card__title {
     padding: 56px var(--pad) 0;
-    font-size: 22px;
-    line-height: 25px;
+    font-size: 23px;
+    line-height: 26px;
   }
   .option-card__title::after {
     content: "";
@@ -1430,8 +1430,8 @@ html { scroll-behavior: smooth; }
   .post__title {
     max-width: 293px;
     justify-self: center;
-    font-size: 22px;
-    line-height: 25px;
+    font-size: 23px;
+    line-height: 26px;
     letter-spacing: 0;
   }
   .post__dek {
@@ -1668,7 +1668,7 @@ html { scroll-behavior: smooth; }
     letter-spacing: .0655em;
   }
   .colophon__social {
-    gap: 12px;
+    gap: 14px;
     min-width: 0;
     width: max-content;
     justify-self: start;
