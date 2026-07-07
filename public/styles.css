@@ -196,6 +196,7 @@ body.is-lang-fading [data-lang-content] {
 
 /* directory split into two left-aligned text columns, followed by the preview. */
 .mega__col { display: flex; flex-direction: column; }
+.mega__panel[data-panel="Casamata"] .mega__col,
 .mega__panel[data-panel="Teo"] .mega__col,
 .mega__panel[data-panel="Casa Teo"] .mega__col,
 .mega__panel[data-panel="Projects"] .mega__col {
