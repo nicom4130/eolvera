@@ -1293,7 +1293,7 @@ html { scroll-behavior: smooth; }
     padding: 56px var(--pad) 58px;
   }
   .option-lead__title {
-    font-size: 20px;
+    font-size: 22px;
     line-height: 25px;
     letter-spacing: 0;
   }
@@ -1329,7 +1329,7 @@ html { scroll-behavior: smooth; }
   }
   .option-card__title {
     padding: 56px var(--pad) 0;
-    font-size: 20px;
+    font-size: 22px;
     line-height: 25px;
   }
   .option-card__title::after {
@@ -1365,10 +1365,10 @@ html { scroll-behavior: smooth; }
   }
   .archive-filter__button {
     padding: 0 0 6px;
-    font-size: 9px;
+    font-size: 11px;
     line-height: 15px;
     font-weight: 300;
-    letter-spacing: .15em;
+    letter-spacing: .1227em;
   }
   .archive-grid {
     grid-template-columns: 1fr;
@@ -1383,9 +1383,10 @@ html { scroll-behavior: smooth; }
     padding: 0 var(--pad);
   }
   .archive-card__meta {
-    font-size: 9px;
+    font-size: 11px;
     line-height: 15px;
-    letter-spacing: .15em;
+    font-weight: 300;
+    letter-spacing: .1227em;
   }
   .archive-card__title {
     margin-top: 10px;
@@ -1412,10 +1413,10 @@ html { scroll-behavior: smooth; }
   .post__meta {
     justify-self: center;
     font-family: var(--sans);
-    font-size: 9px;
+    font-size: 11px;
     line-height: 15px;
     font-weight: 300;
-    letter-spacing: .15em;
+    letter-spacing: .1364em;
     text-transform: uppercase;
     color: var(--grey);
   }
@@ -1661,10 +1662,10 @@ html { scroll-behavior: smooth; }
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 1rem;
-    font-size: 9px;
+    font-size: 11px;
     line-height: 15px;
     font-weight: 300;
-    letter-spacing: .08em;
+    letter-spacing: .0655em;
   }
   .colophon__social {
     gap: 12px;
@@ -1682,9 +1683,10 @@ html { scroll-behavior: smooth; }
   }
   .colophon__copy::before {
     content: "©2026";
-    font-size: 9px;
+    font-size: 11px;
     line-height: 15px;
-    letter-spacing: .08em;
+    font-weight: 300;
+    letter-spacing: .0655em;
   }
 }
 
