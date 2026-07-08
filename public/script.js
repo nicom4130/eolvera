@@ -8,6 +8,13 @@
 
   var doc = document;
 
+  doc.addEventListener("dragstart", function (e) {
+    if (e.target && e.target.tagName === "IMG") e.preventDefault();
+  });
+  doc.addEventListener("contextmenu", function (e) {
+    if (e.target && e.target.tagName === "IMG") e.preventDefault();
+  });
+
   /* ---------------------------------------------------------
      i18n — UI chrome + news copy. EN is the source; ES below.
      --------------------------------------------------------- */
