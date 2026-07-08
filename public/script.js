@@ -395,6 +395,15 @@
       if (a) setMnav(false);
     });
 
+    function closeMnavOnTabletLandscape() {
+      if (mnav.classList.contains("is-open") && isTouchTabletLandscape()) setMnav(false);
+    }
+
+    window.addEventListener("resize", closeMnavOnTabletLandscape);
+    window.addEventListener("orientationchange", function () {
+      window.setTimeout(closeMnavOnTabletLandscape, 120);
+    });
+
     doc.addEventListener("keydown", function (e) { if (e.key === "Escape") setMnav(false); });
   }
 
