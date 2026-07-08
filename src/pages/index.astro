@@ -58,21 +58,23 @@ const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
     <section class="option-front" aria-label="News">
       {lead && (
         <article class="option-lead">
-          <a class="option-lead__media" href={`/news/${lead.slug}/`} aria-label={leadTitle?.enText}>
-            <img src={imgSrc(lead.image)} alt="" loading="eager" decoding="async" />
+          <a class="option-lead__link" href={`/news/${lead.slug}/`} aria-label={leadTitle?.enText}>
+            <span class="option-lead__media">
+              <img src={imgSrc(lead.image)} alt="" loading="eager" decoding="async" />
+            </span>
+            <div class="option-lead__body">
+              <h1 class="option-lead__title">
+                <span data-lang-content="en" set:html={leadTitle?.enHtml}></span>
+                <span data-lang-content="es" hidden set:html={leadTitle?.esHtml}></span>
+              </h1>
+              {(leadExcerpt?.en || leadExcerpt?.es) && (
+                <>
+                  <p class="option-lead__dek" data-lang-content="en">{leadExcerpt.en}</p>
+                  <p class="option-lead__dek" data-lang-content="es" hidden>{leadExcerpt.es}</p>
+                </>
+              )}
+            </div>
           </a>
-          <div class="option-lead__body">
-            <h1 class="option-lead__title">
-              <span data-lang-content="en" set:html={leadTitle?.enHtml}></span>
-              <span data-lang-content="es" hidden set:html={leadTitle?.esHtml}></span>
-            </h1>
-            {(leadExcerpt?.en || leadExcerpt?.es) && (
-              <>
-                <p class="option-lead__dek" data-lang-content="en">{leadExcerpt.en}</p>
-                <p class="option-lead__dek" data-lang-content="es" hidden>{leadExcerpt.es}</p>
-              </>
-            )}
-          </div>
         </article>
       )}
 
@@ -85,21 +87,21 @@ const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 
           return (
             <article class="option-card">
-              <a class="option-card__media" href={`/news/${item.slug}/`} aria-label={title.enText}>
-                <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
-              </a>
-              <h2 class="option-card__title">
-                <a href={`/news/${item.slug}/`}>
+              <a class="option-card__link" href={`/news/${item.slug}/`} aria-label={title.enText}>
+                <span class="option-card__media">
+                  <img src={imgSrc(item.image)} alt="" loading="lazy" decoding="async" />
+                </span>
+                <h2 class="option-card__title">
                   <span data-lang-content="en" set:html={title.enHtml}></span>
                   <span data-lang-content="es" hidden set:html={title.esHtml}></span>
-                </a>
-              </h2>
-              {(excerpt.en || excerpt.es) && (
-                <>
-                  <p class="option-card__excerpt" data-lang-content="en">{excerpt.en}</p>
-                  <p class="option-card__excerpt" data-lang-content="es" hidden>{excerpt.es}</p>
-                </>
-              )}
+                </h2>
+                {(excerpt.en || excerpt.es) && (
+                  <>
+                    <p class="option-card__excerpt" data-lang-content="en">{excerpt.en}</p>
+                    <p class="option-card__excerpt" data-lang-content="es" hidden>{excerpt.es}</p>
+                  </>
+                )}
+              </a>
             </article>
           );
         })}

@@ -242,6 +242,14 @@
   }
   function scheduleHide() { clearHide(); hideTimer = setTimeout(hideMega, 160); }
 
+  function isTouchTabletLandscape() {
+    var touch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) ||
+      (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    var w = window.innerWidth || doc.documentElement.clientWidth;
+    var h = window.innerHeight || doc.documentElement.clientHeight;
+    return !!touch && w > h && w >= 761 && w <= 1366;
+  }
+
   megaLinks.forEach(function (link) {
     var group = link.getAttribute("data-mega");
     link.addEventListener("mouseenter", function () { showMega(group); });
@@ -265,6 +273,22 @@
   if (mega) {
     mega.addEventListener("mouseenter", clearHide);
     mega.addEventListener("mouseleave", scheduleHide);
+    mega.addEventListener("click", function (e) {
+      if (!isTouchTabletLandscape()) return;
+      var item = e.target && e.target.closest ? e.target.closest(".mega__item[data-img]") : null;
+      if (!item || !mega.contains(item)) return;
+
+      var href = item.getAttribute("href");
+      if (!href || href === "#") return;
+
+      e.preventDefault();
+      clearHide();
+      item.focus();
+
+      window.setTimeout(function () {
+        window.location.href = href;
+      }, 1300);
+    });
   }
 
   doc.addEventListener("keydown", function (e) { if (e.key === "Escape") hideMega(); });
