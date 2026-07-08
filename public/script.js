@@ -294,7 +294,7 @@
 
       window.setTimeout(function () {
         window.location.href = href;
-      }, 1300);
+      }, 2500);
     });
   }
 
