@@ -969,10 +969,10 @@ html.mnav-open { overflow: hidden; }
     min-height: 82px;
     padding: 35.94px 0;
     font-family: var(--sans);
-    font-size: 30px;
+    font-size: 28px;
     line-height: 48px;
     font-weight: 600;
-    letter-spacing: .088em;
+    letter-spacing: .10em;
     text-transform: uppercase;
   }
   .macc__head::after {
