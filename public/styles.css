@@ -1334,6 +1334,9 @@ html { scroll-behavior: smooth; }
   .option-paper {
     padding: 0 0 0;
   }
+  .option-home .front__archive {
+    margin-inline: 0;
+  }
   .option-lead {
     display: block;
   }
