@@ -7,7 +7,7 @@ import { createElement } from 'react';
 //
 //  Local dev uses local file storage so localhost works without GitHub auth.
 //  Production uses GitHub mode: the admin commits content straight to this repo
-//  via a GitHub App, so editors work on the LIVE site (newseolvera signs in).
+//  via a GitHub App, so editors work on the LIVE site.
 //  Needs 3 env vars (set in Vercel, and in .env.local for local dev):
 //    KEYSTATIC_GITHUB_CLIENT_ID / KEYSTATIC_GITHUB_CLIENT_SECRET / KEYSTATIC_SECRET
 //  Create them once via the setup wizard at <site>/keystatic (it pre-fills the
@@ -36,7 +36,7 @@ export default config({
     ? { kind: 'local' }
     : {
         kind: 'github',
-        repo: 'newseolvera/enriqueolvera-site',
+        repo: 'nicom4130/eolvera',
       },
 
   ui: {
@@ -61,7 +61,7 @@ export default config({
       ),
     },
     navigation: {
-      Content: ['news', 'categories'],
+      Content: ['news', 'categories', 'consultingLeads'],
     },
   },
 
@@ -164,9 +164,86 @@ export default config({
           description: 'Spanish content for the internal news page. Separate paragraphs with a blank line.',
           multiline: true,
         }),
+        bodyImages: fields.array(
+          fields.object({
+            image: fields.image({
+              label: 'Image',
+              directory: 'public/images/news',
+              publicPath: '/images/news/',
+              validation: { isRequired: true },
+            }),
+            alt: fields.text({
+              label: 'Alt text EN',
+              description: 'Short English description of the image.',
+              validation: { isRequired: true },
+            }),
+            altEs: fields.text({
+              label: 'Alt text ES',
+              description: 'Short Spanish description of the image.',
+              validation: { isRequired: true },
+            }),
+          }),
+          {
+            label: 'Inline images',
+            description: 'Images shown after the second and third paragraphs of the post.',
+          }
+        ),
         link: fields.url({
           label: 'External link',
           description: 'Optional. If present, it appears as an external link inside the post.',
+        }),
+      },
+    }),
+
+    consultingLeads: collection({
+      label: 'Consulting Emails',
+      slugField: 'email',
+      path: 'src/content/consulting-leads/*',
+      format: 'json',
+      entryLayout: 'form',
+      columns: ['email', 'receivedAt', 'status'],
+      schema: {
+        email: fields.slug({
+          name: {
+            label: 'Email',
+            validation: {
+              isRequired: true,
+              pattern: {
+                regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Enter a valid email address.',
+              },
+            },
+          },
+          slug: {
+            label: 'File ID',
+            description: 'Internal file id. Kept separate so duplicate emails can exist if needed.',
+          },
+        }),
+        receivedAt: fields.datetime({
+          label: 'Received at',
+          defaultValue: { kind: 'now' },
+          validation: { isRequired: true },
+        }),
+        source: fields.select({
+          label: 'Source',
+          options: [
+            { label: 'Consulting form', value: 'consulting' },
+            { label: 'Manual entry', value: 'manual' },
+          ],
+          defaultValue: 'manual',
+        }),
+        status: fields.select({
+          label: 'Status',
+          options: [
+            { label: 'New', value: 'new' },
+            { label: 'Contacted', value: 'contacted' },
+            { label: 'Archived', value: 'archived' },
+          ],
+          defaultValue: 'new',
+        }),
+        notes: fields.text({
+          label: 'Notes',
+          multiline: true,
         }),
       },
     }),

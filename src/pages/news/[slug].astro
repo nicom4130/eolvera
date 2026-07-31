@@ -62,12 +62,25 @@ const paragraphs = (value?: string | null) =>
   .map((paragraph) => paragraph.trim())
   .filter(Boolean);
 
+const renderParagraph = (value: string) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
 const title = richTitlePair(post.title, post.titleEs, post.titleRich, post.titleRichEs);
 const excerpt = langPair(post.excerpt, post.excerptEs);
 const category = labelFor(post.category);
 const date = formatDate(post.date);
 const bodyEn = paragraphs(post.body || post.excerpt);
 const bodyEs = paragraphs(post.bodyEs || post.excerptEs || post.body || post.excerpt);
+const bodyImages = (post.bodyImages || [])
+  .map((item) => ({
+    src: imgSrc(item.image),
+    alt: langPair(item.alt, item.altEs),
+  }))
+  .filter((item) => item.src);
 ---
 
 <!DOCTYPE html>
@@ -115,11 +128,29 @@ const bodyEs = paragraphs(post.bodyEs || post.excerptEs || post.body || post.exc
       </figure>
 
       <div class="post__body" data-lang-content="en">
-        {bodyEn.map((paragraph) => <p>{paragraph}</p>)}
+        {bodyEn.map((paragraph, index) => (
+          <>
+            <p set:html={renderParagraph(paragraph)}></p>
+            {index > 0 && bodyImages[index - 1] && (
+              <figure class="post__inline-figure">
+                <img src={bodyImages[index - 1].src} alt={bodyImages[index - 1].alt.en} loading="lazy" decoding="async" />
+              </figure>
+            )}
+          </>
+        ))}
       </div>
 
       <div class="post__body" data-lang-content="es" hidden>
-        {bodyEs.map((paragraph) => <p>{paragraph}</p>)}
+        {bodyEs.map((paragraph, index) => (
+          <>
+            <p set:html={renderParagraph(paragraph)}></p>
+            {index > 0 && bodyImages[index - 1] && (
+              <figure class="post__inline-figure">
+                <img src={bodyImages[index - 1].src} alt={bodyImages[index - 1].alt.es} loading="lazy" decoding="async" />
+              </figure>
+            )}
+          </>
+        ))}
       </div>
 
       {post.link && (

@@ -28,6 +28,7 @@ const langPair = (en?: string | null, es?: string | null) => ({
 
 const lead = news[0];
 const secondaryNews = news.slice(1, 4);
+const hasSingleNews = news.length === 1;
 const leadTitle = lead ? richTitlePair(lead.title, lead.titleEs, lead.titleRich, lead.titleRichEs) : null;
 const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 ---
@@ -55,7 +56,7 @@ const leadExcerpt = lead ? langPair(lead.excerpt, lead.excerptEs) : null;
 
   <main class="paper option-paper" id="top">
     <a id="news"></a>
-    <section class="option-front" aria-label="News">
+    <section class:list={['option-front', { 'option-front--single': hasSingleNews }]} aria-label="News">
       {lead && (
         <article class="option-lead">
           <a class="option-lead__link" href={`/news/${lead.slug}/`} aria-label={leadTitle?.enText}>

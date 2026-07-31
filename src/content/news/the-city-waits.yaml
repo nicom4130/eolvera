@@ -1,0 +1,31 @@
+image: /images/news/the-city-waits/mole.webp
+title: The City Waits.
+titleEs: La ciudad espera.
+date: 2026-07-30
+category: restaurants
+pinned: true
+excerpt: "The cantina is one of Mexico City’s great waiting rooms. And while people wait, a small miracle takes place: you order a beer and a bowl of peanuts appears; then a tostada de pata; then tortilla soup, perhaps a taco."
+excerptEs: "La cantina es una de las grandes salas de espera de la ciudad de México. Mientras tanto ocurre un pequeño milagro: uno pide una cerveza y aparecen unos cacahuates; después una tostada de pata; luego una sopa de tortilla, acaso un taco."
+body: |
+  The cantina is one of Mexico City’s great waiting rooms. And while people wait, a small miracle takes place: you order a beer and a bowl of peanuts appears; then a tostada de pata; then tortilla soup, perhaps a taco. Before long, the table holds more than you ever asked for. The city, which usually charges for everything, decides for a fleeting moment to practice abundance.
+
+  Curiously, when we tell the story of cantinas, we tend to talk about the alcohol. The beer, the tequila, the mezcal. Yet we rarely speak of their most faithful companion. There is corn, as unassuming as a good friend. Transformed into tortillas, tostadas, little sopes, or totopos, it carries conversations, postpones farewells, and helps the night arrive in its own time, or break its rhythm altogether.
+
+  Perhaps that is why cantinas matter. Not because they are places to drink, but because they are places to stay. Spaces where the city sits with itself for a while. Where strangers share a table or a place at the bar, where time loosens its pace, and where a warm tortilla can be every bit as important as the song drifting from the piano at this very moment.
+
+  In the end, no one remembers how many peanuts were on the plate. What remains is the memory of being there, *sope* in hand, waiting for something, or someone, and finding, along the way, a little bit of company.
+bodyEs: |
+  La cantina es una de las grandes salas de espera de la ciudad de México. Mientras tanto ocurre un pequeño milagro: uno pide una cerveza y aparecen unos cacahuates; después una tostada de pata; luego una sopa de tortilla, acaso un taco. De pronto la mesa tiene más cosas de las que uno pidió. La ciudad, que suele cobrarlo todo, decide por un instante practicar la abundancia.
+
+  Es curioso: cuando se cuenta la historia de las cantinas solemos hablar del alcohol. De la cerveza, del tequila o el mezcal. Pero rara vez hablamos de su compañero más constante. Ahí está el maíz, discreto como los buenos amigos. Convertido en tortilla, tostada, sopesito o totopo, sostiene conversaciones, aplaza despedidas y ayuda a que la noche llegue a su ritmo, o quiebre su ritmo.
+
+  Quizá por eso las cantinas importan. Porque no son sólo lugares para beber, sino para permanecer. Espacios donde la ciudad se sienta consigo misma durante un rato. Donde los desconocidos comparten mesa o barra, donde el tiempo afloja el paso y donde una tortilla caliente puede ser tan importante como la canción que sale del piano ahora mismo.
+
+  Al final, nadie recuerda cuántos cacahuates había en el plato. Lo que se recuerda es haber estado ahí, sope en mano, esperando algo o a alguien. Y haber encontrado una poquita de compañía.
+bodyImages:
+  - image: /images/news/the-city-waits/mixiote.webp
+    alt: A mixiote served in a white bowl.
+    altEs: Un mixiote servido en un plato blanco.
+  - image: /images/news/the-city-waits/chile-ancho-relleno.webp
+    alt: A stuffed ancho chile with fresh cheese and greens.
+    altEs: Un chile ancho relleno con queso fresco y hojas verdes.
